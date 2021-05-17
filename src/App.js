@@ -1,5 +1,6 @@
 import './App.css';
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
+
 
 const Button = ({type,text}) => {
 
@@ -26,12 +27,9 @@ const TripCalculator = () => {
     setSpeed2(event.target.value)
   }
 
-  const handlefuelUseChange = (event) => {
-    setFuelUse(event.target.value)
-  }
 
-  const handledistanceChange = (event, distance) => {
-    setDistance(distance)
+  const handledistanceChange = (event) => {
+    setDistance(event.target.value)
   }
 
   const calculateTimeandFuel = (event) => {
@@ -98,13 +96,13 @@ const TripCalculator = () => {
             <input type="radio" checked={fuelUse==4.0} onClick={() => setFuelUse(4.0)} />
           </div>
           <div>
-            Distance <input value={distance} onChange={handledistanceChange}/>
+            Distance <input value={distance} onChange={handledistanceChange}/> Km
           </div>
-          speed <input value={speed1} onChange={handleSpeedChange1}/>
+          speed <input value={speed1} onChange={handleSpeedChange1}/>Km/h
           <Button type={'submit'} text={'SEND'}/>
       </form>
       <form onSubmit={calculateTimeandFuel2}>
-          speed <input value={speed2} onChange={handleSpeedChange2}/>
+          speed <input value={speed2} onChange={handleSpeedChange2}/>Km/h
           <Button type={'submit'} text={'SEND'}/>
       </form>
       <div>
@@ -132,10 +130,19 @@ const TripCalculator = () => {
 
 }
 
+
 function App() {
+  const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    setLoading(true)
+    setTimeout(() =>{
+      setLoading(false)
+    },3000)
+  },[])
   return (
     <div>
-      <TripCalculator/>
+    <TripCalculator/>
     </div>
   );
 }
