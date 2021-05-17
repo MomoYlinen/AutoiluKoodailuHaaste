@@ -78,26 +78,6 @@ const TripCalculator = () => {
 
   }
 
-  const marks = [
-    {
-      value: 0,
-      label: '50km',
-    },
-    {
-      value: 100,
-      label: '100km',
-    },
-    {
-      value: 250,
-      label: '250km',
-    },
-    {
-      value: 500,
-      label: '500km',
-    },
-  ];
-
-
   console.log(distance)
 
   const {fuelused,traveltime} = travelinfo
