@@ -1,0 +1,21 @@
+    event.preventDefault()
+
+    console.log('fuel',fuelUse)
+    console.log('distance',distance)
+    console.log('speed',speed)
+    
+    const consumptionMultiplier = 1.009
+    let fuel = fuelUse
+    for(let i = 1; i <=speed; i++) {
+      fuel*=consumptionMultiplier
+    }
+    console.log(fuel)
+    const travelTime = (distance/speed)*60
+    let fuelConsumption = fuel*(distance/100)
+    const travelinfoObject = {
+      fuelused: fuelConsumption,
+      traveltime:travelTime
+    }
+
+    console.log(travelinfoObject)
+    setTravelInfo(travelinfoObject)
