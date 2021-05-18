@@ -1,148 +1,31 @@
 import './App.css';
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
+import TripCalculator from './components/TripCalculator'
+import TripCalculatorWithMaps from './components/TripCalculatorWithMaps'
 
 
-const Button = ({type,text}) => {
 
-  return (
-    <button type={type}>{text}</button>
-  )
-}
-
-const TripCalculator = () => {
-
-  
-  const [fuelUse, setFuelUse] = useState(3.0)
-  const [speed1, setSpeed1] = useState(0)
-  const [speed2, setSpeed2] = useState(0)
-  const [distance, setDistance] = useState(80)
-  const [travelinfo,setTravelInfo] = useState({})
-  const [travelinfo2,setTravelInfo2] = useState({})
-
-  const handleSpeedChange1 = (event) => {
-    setSpeed1(event.target.value)
-  }
-
-  const handleSpeedChange2 = (event) => {
-    setSpeed2(event.target.value)
-  }
-
-
-  const handledistanceChange = (event) => {
-    setDistance(event.target.value)
-  }
-
-  const calculateTimeandFuel = (event) => {
-    event.preventDefault()
-
-    console.log('fuel',fuelUse)
-    console.log('distance',distance)
-    console.log('speed',speed1)
-    
-    const consumptionMultiplier = 1.009
-    let fuel = fuelUse
-    for(let i = 1; i <=speed1; i++) {
-      fuel*=consumptionMultiplier
-    }
-    console.log(fuel)
-    const travelTime = (distance/speed1)*60
-    let fuelConsumption = fuel*(distance/100)
-    const travelinfoObject = {
-      fuelused: fuelConsumption,
-      traveltime:travelTime
-    }
-
-    console.log(travelinfoObject)
-    setTravelInfo(travelinfoObject)
-
-  }
-
-  const calculateTimeandFuel2 = (event) => {
-    event.preventDefault()
-    
-    const consumptionMultiplier = 1.009
-    let fuel = fuelUse
-    for(let i = 1; i <=speed2; i++) {
-      fuel*=consumptionMultiplier
-    }
-    console.log(fuel)
-    const travelTime = (distance/speed2)*60
-    let fuelConsumption = fuel*(distance/100)
-    const travelinfoObject = {
-      fuelused2: fuelConsumption,
-      traveltime2:travelTime
-    }
-    setTravelInfo2(travelinfoObject)
-
-  }
-
-  console.log(distance)
-
-  const {fuelused,traveltime} = travelinfo
-  const {fuelused2,traveltime2}=travelinfo2
-
-  const lessTime = fuelused2-fuelused
-  const moreGas = traveltime-traveltime2
-
-    return (
-      <div>
-      <form onSubmit={calculateTimeandFuel}>
-            <div>
-            <label>Car 1</label>
-            <input type="radio" checked={fuelUse==3.0} onClick={() => setFuelUse(3.0)} />
-            <label>Car 2</label>
-            <input type="radio" checked={fuelUse==3.5} onClick={() => setFuelUse(3.5)} />
-            <label>Car 3</label>
-            <input type="radio" checked={fuelUse==4.0} onClick={() => setFuelUse(4.0)} />
-          </div>
-          <div>
-            Distance <input value={distance} onChange={handledistanceChange}/> Km
-          </div>
-          speed <input value={speed1} onChange={handleSpeedChange1}/>Km/h
-          <Button type={'submit'} text={'SEND'}/>
-      </form>
-      <form onSubmit={calculateTimeandFuel2}>
-          speed <input value={speed2} onChange={handleSpeedChange2}/>Km/h
-          <Button type={'submit'} text={'SEND'}/>
-      </form>
-      <div>
-        Fuel consumption:{fuelused}/100km
-      </div>
-      <div>
-        Time used: {traveltime} minutes
-      </div>
-      <div>
-        Fuel consumption:{fuelused2}/100km
-      </div>
-      <div>
-        Time used: {traveltime2} minutes
-      </div>
-      <div>
-        {moreGas} minutes less traveltime
-      </div>
-      <div>
-        {lessTime} litres more gasoline used
-      </div>
-      </div>
-      
-    )
-
-
-}
 
 
 function App() {
-  const [loading, setLoading] = useState(false)
 
-  useEffect(() => {
-    setLoading(true)
-    setTimeout(() =>{
-      setLoading(false)
-    },3000)
-  },[])
+  const [show, setShow] = useState(false)
+
+  const buttonText = show ? 'Use Adress' : 'Input distance manually'
+
+  const handleClick = () => {
+    if (show===false) {
+      setShow(true)
+    }else if(show===true) {
+      setShow(false)
+    }
+  }
+
+
   return (
     <div>
-    <TripCalculator/>
+    <button onClick={handleClick} type="button"> {buttonText} </button>
+    {show ? <TripCalculator/> : <TripCalculatorWithMaps/>}
     </div>
   );
 }
