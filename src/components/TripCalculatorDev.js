@@ -6,7 +6,7 @@ import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Grid from '@material-ui/core/Grid';
-import {DriveEta,Speed,Directions} from '@material-ui/icons/'
+import {DriveEta,Speed,Directions,LocalGasStation, WatchLater} from '@material-ui/icons/'
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import Typography from '@material-ui/core/Typography';
@@ -106,12 +106,14 @@ const TripCalculatorDev = () => {
       
       const travelinfoObject1 = {
         fuelused: fuelConsumptionOne,
-        traveltime:travelTime1
+        traveltime:travelTime1,
+        fuelUsed100:fuelUsed1
       }
 
       const travelinfoObject2 = {
         fuelused2: fuelConsumptionTwo,
-        traveltime2:travelTime2
+        traveltime2:travelTime2,
+        fuelUsed200:fuelUsed2
       }
   
       setTravelInfo(travelinfoObject1)
@@ -123,24 +125,24 @@ const TripCalculatorDev = () => {
 
         if(!traveltime) return `${0} minutes`
         
-        if (traveltime<60) return `${traveltime} minutes`
+        if (traveltime<60) return `${traveltime.toFixed(0)} minutes`
           
         let counter = 0
         while (traveltime >= 60) {
             counter +=1
             traveltime -= 60
           }
-        const time = `${counter} hours ${traveltime} minutes`
+        const time = `${counter} hours ${traveltime.toFixed(0)} minutes`
     
         return time
       }
     console.log(distance)
   
-    const {fuelused,traveltime} = travelinfo
-    const {fuelused2,traveltime2}=travelinfo2
+    const {fuelused,traveltime,fuelUsed100} = travelinfo
+    const {fuelused2,traveltime2,fuelUsed200}=travelinfo2
   
-    const lessTime = `${fuelused2-fuelused} litres more gasoline used`
-    const moreGas = `Estimated traveltime is ${traveltime-traveltime2} minutes less`
+    const lessTime = `${fuelused ? (fuelused2-fuelused).toFixed(2): fuelused} litres more gasoline used`
+    const moreGas = `Estimated traveltime is ${travelTimeConverter((traveltime-traveltime2))} minutes less`
     const speedDifference = `Speed difference is ${speed2-speed1}`
 
     const timeCoverted1 = travelTimeConverter(traveltime)
@@ -152,8 +154,8 @@ const TripCalculatorDev = () => {
         return { speed,traveltime,fuelused};
       }
     const rows =[
-        createTable(speed1,timeCoverted1,fuelused),
-        createTable(speed2,timeCoverted2,fuelused2),
+        createTable(speed1,timeCoverted1,(`${fuelused ? fuelused.toFixed(2):fuelused} litres (${fuelUsed100 ? fuelUsed100.toFixed(1):''} l/100km)`)),
+        createTable(speed2,timeCoverted2,(`${fuelused2 ? fuelused2.toFixed(2):fuelused2} litres (${fuelUsed200 ? fuelUsed200.toFixed(1):''} l/100km)`)),
         createTable(speedDifference,moreGas,lessTime)
     ]
 
@@ -171,8 +173,7 @@ const TripCalculatorDev = () => {
                         aria-label="Cars"
                         >
                         <ToggleButton value="Car1" size="large" aria-label="left aligned" onClick={() => setFuelUse(3.0)}>
-                            <p><DriveEta /></p>
-                            <p>Car1</p>
+                            <DriveEta /> Car
                         </ToggleButton>
                         <ToggleButton value="Car2" size="large" aria-label="centered" onClick={() => setFuelUse(3.5)}>
                         <p><DriveEta /></p>
@@ -214,13 +215,15 @@ const TripCalculatorDev = () => {
             </Grid>
             </Grid>
             <Grid item xs={12}>
+            {fuelused ?
             <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
-        <TableHead>
+      <Typography variant="h8">
+        <TableHead size='large'>
           <TableRow>
-            <TableCell >Speed</TableCell>
-            <TableCell align="right">Time</TableCell>
-            <TableCell align="right">Fuel use</TableCell>
+            <TableCell ><Speed/></TableCell>
+            <TableCell align="center"><WatchLater/></TableCell>
+            <TableCell align="right"><LocalGasStation/></TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -234,8 +237,10 @@ const TripCalculatorDev = () => {
             </TableRow>
           ))}
         </TableBody>
+        </Typography>
       </Table>
-    </TableContainer>
+    </TableContainer> : ''
+    }
             </Grid>
             </Paper>
             </Grid>
