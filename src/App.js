@@ -25,8 +25,7 @@ function App() {
 
 
   return (
-    <div>
-      <CssBaseline/>
+    <div className='app'>
       <TripCalculatorDev/>
     </div>
   );
