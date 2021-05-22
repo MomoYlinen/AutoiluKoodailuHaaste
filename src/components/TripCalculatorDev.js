@@ -204,10 +204,10 @@ const TripCalculatorDev = () => {
                         value={alignment}
                         exclusive
                         onChange={handleAlignment}
-                        aria-label="Cars"
+                        aria-label="text-aligment"
                         style={buttonGroupStyle}
                         >
-                        <ToggleButton style={buttonToggleStyle} value="Car1" aria-label="left aligned" onClick={() => setFuelUse(3.0)}>
+                        <ToggleButton style={buttonToggleStyle} value="check" aria-label="left aligned" onClick={() => setFuelUse(3.0)}>
                            <label style={labelStyle}> <img src={smallCar2} style={imageSize}/></label>
                         </ToggleButton>
                         <ToggleButton style={buttonToggleStyle} value="Car2"  aria-label="centered" onClick={() => setFuelUse(3.5)}>
