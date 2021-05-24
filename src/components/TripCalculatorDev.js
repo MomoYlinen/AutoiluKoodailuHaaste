@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     flexDirection: 'row',
     background:'#d32f2f',
-    padding:'10px 20px 10px 20px'
+    padding:'5px 10px 10px 10px'
   },
   paper: {
     height: 140,
@@ -43,21 +43,7 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
-  table: {
-    Width: 150,
-  },
 }));
-
-const theme = createMuiTheme({
-    palette: {
-      primary: {
-        main: '#d32f2f',
-      },
-      secondary: {
-        main: '#7d7979',
-      },
-  },
-});
 
 
 const TripCalculatorDev = () => {
@@ -190,11 +176,11 @@ const TripCalculatorDev = () => {
     const convertedFuelUse2= `${fuelused2 ? fuelused2.toFixed(2):fuelused2} litraa`
 
     const paperStyle ={padding:'25px 15px 25px 15px',width:500, height:'100vhmin',margin:'20px auto', border:'1px solid' }
-    const results = {    display: 'flex',flexDirection: 'column', padding: '10px'}
-    const resultsHeader = {padding: '0px 0px 30px 0px' }
-    const showResults = {padding: '0px 0px 15px 0px' }
+    const results = {    display: 'flex',flexDirection: 'column', padding: '10px '}
+    const resultsHeader = {padding: '0px 0px 40px 0px' }
+    const showResults = {padding: '0px 0px 20px 0px' }
     const answerStyle = {padding: '10px 5px 10px 5px' }
-    const answerBox = {padding:'10px', items:"center"}
+    const answerBox = {padding:'50px 0px 0px 0px', items:"center"}
 
     const buttonContainer = {height:'70px', padding:'10px 0px 100px 0px'}
     const buttonGroup = {width:'100%', padding:'10px'}
@@ -216,6 +202,8 @@ const TripCalculatorDev = () => {
 
     const buttonStyle = {padding: '0px 0px 0px 170px'}
     const buttonStyle2 = {padding: '10px 0px 0px 60px'}
+
+    const gridSeparations = {padding :'10px 0px 0px 0px'}
     
  
       return (
@@ -223,6 +211,7 @@ const TripCalculatorDev = () => {
             <Grid container className={classes.grid} spacing={3} padding='50px'>
                 <Paper style={paperStyle}>
                 {show ? 
+                <div>
                 <Grid item xs={12}>
                     <Grid container justify="center" style={buttonContainer}>
                     <ToggleButtonGroup
@@ -326,11 +315,22 @@ const TripCalculatorDev = () => {
             </Grid>
             </Grid>
             </Grid>
-            :  
+            </div>
+            :
+            <div>
             <Grid item xs={12}>
               <Grid container padding='10px'>
               <Grid item xs={12}>
               <Grid container padding='10px' justify="center">
+                <Typography variant='h3'>
+                  <div style={results}>
+                  Tulokset
+                  </div>
+                </Typography>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} style={gridSeparations}>
+              <Grid container padding='10px' justify="center" style={gridSeparations}>
                 <Typography variant='h5'>
                   <div style={results}>
                   Etäisyys
@@ -342,7 +342,7 @@ const TripCalculatorDev = () => {
                 </Grid>
               </Grid>
             <Grid item xs={12}>
-              <Grid container padding='10px'>
+              <Grid container>
             <Grid item xs={3}>
               <Grid container padding='10px' style={results}>
                 <Typography variant='h5'>
@@ -413,6 +413,7 @@ const TripCalculatorDev = () => {
             </Grid>
             </Grid>
             </Grid>
+            </div>
 }
             </Paper>
             </Grid>
