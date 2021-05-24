@@ -11,21 +11,9 @@ import {Typography, CssBaseline} from '@material-ui/core'
 
 function App() {
 
-  const [show, setShow] = useState(false)
-
-  const buttonText = show ? 'Use Adress' : 'Input distance manually'
-
-  const handleClick = () => {
-    if (show===false) {
-      setShow(true)
-    }else if(show===true) {
-      setShow(false)
-    }
-  }
-
 
   return (
-    <div className='app'>
+    <div>
       <TripCalculatorDev/>
     </div>
   );
