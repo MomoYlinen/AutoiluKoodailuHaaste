@@ -11,16 +11,11 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import mediumCar from '../cars/mediumCar.svg'
-import smallCar from '../cars/smallCar.svg'
-import smallCar2 from '../cars/smallCar2.svg'
+import miniVan from '../cars/minivan-car.svg'
+import sedanCar from '../cars/sedan-car-model.svg'
+import cityCar from '../cars/car-city-model.svg'
 import { createMuiTheme } from '@material-ui/core/styles';
+import Switch from '@material-ui/core/Switch';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -32,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
     flexGrow: 1,
     flexDirection: 'row',
     background:'#d32f2f',
-    padding:'10px 20px 10px 20px'
+    padding:'5px 10px 10px 10px'
   },
   paper: {
     height: 140,
@@ -48,21 +43,7 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
     },
   },
-  table: {
-    Width: 150,
-  },
 }));
-
-const theme = createMuiTheme({
-    palette: {
-      primary: {
-        main: '#d32f2f',
-      },
-      secondary: {
-        main: '#7d7979',
-      },
-  },
-});
 
 
 const TripCalculatorDev = () => {
@@ -77,6 +58,11 @@ const TripCalculatorDev = () => {
       setAlignment(newAlignment);
     };
 
+    const [state, setState] = useState({
+      checkedA: true,
+      checkedB: true,
+    });
+
   
     const [fuelUse, setFuelUse] = useState(3.0)
     const [speed1, setSpeed1] = useState()
@@ -85,6 +71,18 @@ const TripCalculatorDev = () => {
     const [travelinfo,setTravelInfo] = useState({})
     const [travelinfo2,setTravelInfo2] = useState({})
   
+
+    const [show, setShow] = useState(true)
+
+    const buttonText = show ? 'Use Adress' : 'Input distance manually'
+  
+    const handleClick = () => {
+      if (show===false) {
+        setShow(true)
+      }else if(show===true) {
+        setShow(false)
+      }
+    }
     const handleSpeedChange1 = (event) => {
       setSpeed1(event.target.value)
     }
@@ -97,6 +95,10 @@ const TripCalculatorDev = () => {
     const handledistanceChange = (event) => {
       setDistance(event.target.value)
     }
+
+    const handleSwitchChange = (event) => {
+      setState({ ...state, [event.target.name]: event.target.checked });
+    };
 
     const fuelUseCalculator = (fuelUse,speed) => {
         const consumptionMultiplier = 1.009
@@ -111,7 +113,7 @@ const TripCalculatorDev = () => {
   
     const calculateTimeandFuel = (event) => {
       event.preventDefault()
-
+      setShow(false)
       const fuelUsed1 = fuelUseCalculator(fuelUse,speed1)
       const fuelUsed2 = fuelUseCalculator(fuelUse,speed2)
       
@@ -159,154 +161,260 @@ const TripCalculatorDev = () => {
     const {fuelused,traveltime,fuelUsed100} = travelinfo
     const {fuelused2,traveltime2,fuelUsed200}=travelinfo2
   
-    const lessTime = `${fuelused ? (fuelused2-fuelused).toFixed(2): fuelused} litraa enemmän polttoainetta käytetty`
-    const moreGas = `Arvioitu matkaaika on ${travelTimeConverter((traveltime-traveltime2))} lyhyempi`
-    const speedDifference = `Vauhtiero on ${speed2-speed1}`
+    const lessTime = `${fuelused ? (fuelused2-fuelused).toFixed(2): fuelused}`
+    const moreGas = `${travelTimeConverter((traveltime-traveltime2))} `
+    const speedDifference = `${speed2-speed1}`
 
     const timeCoverted1 = travelTimeConverter(traveltime)
     const timeCoverted2 = travelTimeConverter(traveltime2)
 
-    const paperStyle ={padding:'25px 15px 25px 15px',width:500, height:'100vhmin',margin:'20px auto', background:'#6b6a6a', border:'1px solid' }
-    const buttonStyle = {padding:'0px 0px 10px 0px', justify:'center'}
-    const buttonGroupStyle = {width:'80%', height:'90px',justify:'center', padding:'10px'}
-    const buttonToggleStyle = {width:'36%', justify:'center',background:'white',border:'15 px solid', borderColor:'blue',borderRadius:'10px'}
-    const labelStyle = {padding:'0px',fontSize:'0.6rem', justify:'center'}
-    const imageSize = {height:'80px', justify:'center', padding:'10px'}
-    const labels1 = {padding:'30px 25px 20px 25px',color:'white'}
-    const labels2 = {padding:'20px 25px 20px 25px',color:'white'}
-    const labels3 = {padding:'30px 5px 20px 5px',color:'white'}
-    const labels4 = {padding:'20px 5px 20px 0px',color:'white'}
-
-    const toggleButtonlabel = {width:'100%'}
-
-    const inputSize = {width:'80%', height:'45px',background:'#ffffff'}
-    const formMargin = {width:'100%', justify:'center'}
-    const formPadding = {padding:'0px 15px 0px 0px',width:'80%', margin:'0px'}
-    const buttonPadding = {padding:'10px 0px 0px 0px'}
 
     const createTable = (speed,traveltime,fuelused) => {
         return { speed,traveltime,fuelused};
       }
-    const rows =[
-        createTable(speed1,timeCoverted1,(`${fuelused ? fuelused.toFixed(2):fuelused} litres`)),
-        createTable(speed2,timeCoverted2,(`${fuelused2 ? fuelused2.toFixed(2):fuelused2} litres`)),
-        createTable(speedDifference,moreGas,lessTime)
-    ]
+    const convertedFuelUse = `${fuelused ? fuelused.toFixed(2):fuelused} litraa`
+    const convertedFuelUse2= `${fuelused2 ? fuelused2.toFixed(2):fuelused2} litraa`
 
-  
+    const paperStyle ={padding:'25px 15px 25px 15px',width:500, height:'100vhmin',margin:'20px auto', border:'1px solid' }
+    const results = {    display: 'flex',flexDirection: 'column', padding: '10px '}
+    const resultsHeader = {padding: '0px 0px 40px 0px' }
+    const showResults = {padding: '0px 0px 20px 0px' }
+    const answerStyle = {padding: '10px 5px 10px 5px' }
+    const answerBox = {padding:'50px 0px 0px 0px', items:"center"}
+
+    const buttonContainer = {height:'70px', padding:'10px 0px 100px 0px'}
+    const buttonGroup = {width:'100%', padding:'10px'}
+    const toggleButtons = {width:'33%', padding:'10px', height:'70px'}
+    const label = {width:'80%', height:'60px'}
+    const label1 = {width:'90%', height:'60px'}
+    const labelImage = {width:'55px'}
+
+    const switchLabel = {padding:'10px'}
+
+    const addressStyle = {display:'flex', flexDirection:'row'}
+    const addressField = {padding:'0px 15px 0px 0px'  }
+    const addressLabel = {padding:'0 0 10px 120px'}
+
+    const formStyle = {justify:'center'}
+    const formCentering = {padding: '0px 0px 11px 120px'}
+    const formCenteringzero = {padding: '0px 0px 0px 0px'}
+    const formlabel = {padding: '0px 0px 20px 0px'}
+
+    const buttonStyle = {padding: '0px 0px 0px 170px'}
+    const buttonStyle2 = {padding: '10px 0px 0px 60px'}
+
+    const gridSeparations = {padding :'10px 0px 0px 0px'}
+    
+ 
       return (
-        <div className={classes.grid}>
-            <Grid container className={classes.grid} spacing={2} padding='50px'>
+        <div>
+            <Grid container className={classes.grid} spacing={3} padding='50px'>
                 <Paper style={paperStyle}>
+                {show ? 
+                <div>
                 <Grid item xs={12}>
-                    <Grid container justify="center" spacing={2} style={buttonStyle}>
-                        <ToggleButtonGroup
+                    <Grid container justify="center" style={buttonContainer}>
+                    <ToggleButtonGroup
                         value={alignment}
                         exclusive
                         onChange={handleAlignment}
                         aria-label="text-aligment"
-                        style={buttonGroupStyle}
+                        style={buttonGroup}
                         >
-                        <ToggleButton style={buttonToggleStyle} value="check" aria-label="left aligned" onClick={() => setFuelUse(3.0)}>
-                           <label style={labelStyle}> <img src={smallCar2} style={imageSize}/></label>
+                        <ToggleButton value="Car1" aria-label="left aligned" onClick={() => setFuelUse(3.0)} style={toggleButtons}>
+                           <label style={label1}> <img src={cityCar} style={labelImage}/>Auto 1</label>
                         </ToggleButton>
-                        <ToggleButton style={buttonToggleStyle} value="Car2"  aria-label="centered" onClick={() => setFuelUse(3.5)}>
-                        <label style={labelStyle}> <img src={smallCar} style={imageSize}/> </label>
+                        <ToggleButton  value="Car2"  aria-label="centered" onClick={() => setFuelUse(3.5)} style={toggleButtons}>
+                        <label style={label} > <img src={sedanCar} style={labelImage}/> Auto 2 </label>
                         </ToggleButton>
-                        <ToggleButton style={buttonToggleStyle} value="Car3" aria-label="right aligned" onClick={() => setFuelUse(4.0)}>
-                        <label style={labelStyle}> <img src={mediumCar} style={imageSize} /> </label>
+                        <ToggleButton  value="Car3" aria-label="right aligned" onClick={() => setFuelUse(4.0)} style={toggleButtons}>
+                        <label style={label} > <img src={miniVan} style={labelImage}/> Auto 3 </label>
                         </ToggleButton>
                         </ToggleButtonGroup>
-
                     </Grid>
                     <Grid className={classes.buttonGroup}>
-                  <Grid container spacing={0}>
-                    <Grid item xs={4} style={labelStyle}>
-                      <Typography variant="h5">
-                        <div style={labels1}>
-                          Etäisyys
+                      <Grid item xs={12}>
+                      <Grid container style={switchLabel} justify="center">
+                        <div>
+                          Kirjoita etäisyys
                         </div>
-                        <div style={labels2}>
-                          Nopeus
+                      <Switch
+                            checked={state.checkedB}
+                            onChange={handleSwitchChange}
+                            color="primary"
+                            name="checkedB"
+                            inputProps={{ 'aria-label': 'primary checkbox' }}
+                          />
+                        <div>
+                          Kirjoita osoite
                         </div>
-                        <div style={labels2}>
-                          Nopeus
-                        </div>
-                        </Typography>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={4} style={formMargin}>
-            <form className={classes.root} onSubmit={calculateTimeandFuel} variant='outlined' style={formPadding}>
-                <div style={inputSize}>
+                  <Grid item xs={12} style={formStyle}>
+                  <Grid container justify="center">
+            <form className={classes.root} onSubmit={calculateTimeandFuel} variant='outlined'>
+              {state.checkedB ?
+                <div>
+                <div style={addressLabel}>
+                    <Typography variant='h5'>
+                    Kirjoita Osoite
+                    </Typography>
+                  </div>
+                <div style={addressStyle}>
+                <FormControl size="small" style={addressField}>
+                    <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
+                    <OutlinedInput id='component-outlined' value={distance} onChange={handledistanceChange} placeholder='Distance' />
+                </FormControl>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
                     <OutlinedInput id='component-outlined' value={distance} onChange={handledistanceChange} placeholder='Distance' />
                 </FormControl>
                 </div>
-                <div style={inputSize}>
+                </div>:
+                <div>
+                  <div style={formlabel}>
+                    <Typography variant='h5'>
+                    Kirjoita etäisyys
+                    </Typography>
+                  </div>
+                <FormControl size="small">
+                    <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
+                    <OutlinedInput id='component-outlined' value={distance} onChange={handledistanceChange} placeholder='Distance' />
+                </FormControl>
+                </div>
+                }
+                <div style= {state.checkedB ? formCentering : formCenteringzero} >
+                <div style={formlabel}>
+                    <Typography variant='h5'>
+                    Kirjoita nopeus
+                    </Typography>
+                  </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Speed/></InputLabel>
                     <OutlinedInput id='component-outlined' value={speed1} onChange={handleSpeedChange1} placeholder='Speed' />
                 </FormControl>
                 </div>
-                <div style={inputSize}>
+                <div style= {state.checkedB ? formCentering : formCenteringzero}>
+                <div style={formlabel}>
+                    <Typography variant='h5'>
+                    Kirjoita nopeus
+                    </Typography>
+                  </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Speed/></InputLabel>
                     <OutlinedInput id='component-outlined' value={speed2} onChange={handleSpeedChange2}  placeholder='Speed' />
                 </FormControl>
                 </div>
-                <div style={buttonPadding}>
-                <Button variant="contained" color="primary" type="submit" size='large' >
+                <div style= {state.checkedB ? buttonStyle : buttonStyle2}>
+                <Button variant="contained" color="primary" type="submit" >
                     SEND
                 </Button>
                 </div>
             </form>
             </Grid>
-            <Grid item xs={4} style={labelStyle}>
-                      <Typography variant="h6">
-                        <div style={labels3}>
-                        {`${fuelUsed100 ? distance:''} Km`}
-                        </div>
-                        <div style={labels4}>
-                        {`${fuelUsed100 ? fuelUsed100.toFixed(1):''}l/100km`}
-                        </div>
-                        <div style={labels4}>
-                        {`${fuelUsed200 ? fuelUsed200.toFixed(1):''}l/100km`}
-                        </div>
-                        </Typography>
-                    </Grid>
             </Grid>
+            </Grid>
+            </Grid>
+            </div>
+            :
+            <div>
+            <Grid item xs={12}>
+              <Grid container padding='10px'>
+              <Grid item xs={12}>
+              <Grid container padding='10px' justify="center">
+                <Typography variant='h3'>
+                  <div style={results}>
+                  Tulokset
+                  </div>
+                </Typography>
+                </Grid>
+              </Grid>
+              <Grid item xs={12} style={gridSeparations}>
+              <Grid container padding='10px' justify="center" style={gridSeparations}>
+                <Typography variant='h5'>
+                  <div style={results}>
+                  Etäisyys
+                  </div>
+                  <div style={resultsHeader}>
+                    {distance} Km
+                  </div>
+                </Typography>
+                </Grid>
+              </Grid>
+            <Grid item xs={12}>
+              <Grid container>
+            <Grid item xs={3}>
+              <Grid container padding='10px' style={results}>
+                <Typography variant='h5'>
+                  <div style={resultsHeader}>
+                    Nopeus
+                  </div>
+                </Typography>
+                <Typography variant='h6'>
+                <div style={showResults}>
+               {speed1} Km
+                </div>
+                <div style={showResults}>
+                  {speed2} Km
+                </div>
+                </Typography>
+                </Grid>
+                </Grid>
+              <Grid item xs={6}>
+              <Grid container padding='10px' style={results} justify='center'>
+              <Typography variant='h5' style={resultsHeader}>
+                  <div>
+                    Matka-aika
+                  </div>
+                </Typography>
+                <Typography variant='h6'>
+                <div style={showResults}>
+                {timeCoverted1}
+                </div>
+                <div style={showResults}>
+                {timeCoverted2}
+                </div>
+                </Typography>
+                </Grid>
+              </Grid>
+              <Grid item xs={3}>
+              <Grid container padding='10px' style={results}>
+              <Typography variant='h5' style={resultsHeader}>
+                  <div>
+                    Kulutus
+                  </div>
+                </Typography>
+                <Typography variant='h6'>
+                <div style={showResults}>
+                {convertedFuelUse}
+                </div>
+                <div style={showResults}>
+                {convertedFuelUse2}
+                </div>
+                </Typography>
+                </Grid>
+              </Grid>
             </Grid>
             </Grid>
             <Grid item xs={12}>
-              <Grid container padding='10px'>
-            {fuelused ?
-            <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
-      <Typography variant="h8">
-        <TableHead size='large'>
-          <TableRow>
-            <TableCell ><Speed/></TableCell>
-            <TableCell align="center"><WatchLater/></TableCell>
-            <TableCell align="center"><LocalGasStation/></TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <TableRow key={row.name}>
-              <TableCell component="th" scope="row">
-              {row.speed} Km
-              </TableCell>
-              <TableCell align="right">{row.traveltime}</TableCell>
-              <TableCell align="right">{row.fuelused}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-        </Typography>
-      </Table>
-    </TableContainer> : ''
-    }
+              <Grid container style={answerBox}>
+                <Typography variant='h5'>
+                  <div style={answerStyle}>
+                  Kulkemalla  {speedDifference} kilometriä nopeampaa saavutettaan {moreGas} 
+                  lyhyempi matka-aika, mutta polttoainekulutus kasvaa {lessTime} litraa.
+                  </div>
+                  <div>
+                  <Button variant="contained" color="primary" type='button' onClick={() => setShow(true)}>
+                    RETURN
+                </Button>
+                </div>
+                </Typography>
+              </Grid>
             </Grid>
             </Grid>
+            </Grid>
+            </div>
+}
             </Paper>
             </Grid>
         </div>
