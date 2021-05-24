@@ -169,7 +169,7 @@ const TripCalculatorDev = () => {
     const paperStyle ={padding:'25px 15px 25px 15px',width:500, height:'100vhmin',margin:'20px auto', background:'#6b6a6a', border:'1px solid' }
     const buttonStyle = {padding:'0px 0px 10px 0px', justify:'center'}
     const buttonGroupStyle = {width:'80%', height:'90px',justify:'center', padding:'10px'}
-    const buttonToggleStyle = {width:'36%', justify:'center',background:'white',border:'15 px solid', borderColor:'blue',borderRadius:'10px'}
+    const buttonToggleStyle = {width:'36%', justify:'center',background:'white',border:'15 px solid', borderColor:'blue'}
     const labelStyle = {padding:'0px',fontSize:'0.6rem', justify:'center'}
     const imageSize = {height:'80px', justify:'center', padding:'10px'}
     const labels1 = {padding:'30px 25px 20px 25px',color:'white'}
@@ -188,8 +188,8 @@ const TripCalculatorDev = () => {
         return { speed,traveltime,fuelused};
       }
     const rows =[
-        createTable(speed1,timeCoverted1,(`${fuelused ? fuelused.toFixed(2):fuelused} litres`)),
-        createTable(speed2,timeCoverted2,(`${fuelused2 ? fuelused2.toFixed(2):fuelused2} litres`)),
+        createTable(speed1,timeCoverted1,(`${fuelused ? fuelused.toFixed(2):fuelused} litraa`)),
+        createTable(speed2,timeCoverted2,(`${fuelused2 ? fuelused2.toFixed(2):fuelused2} litraa`)),
         createTable(speedDifference,moreGas,lessTime)
     ]
 
