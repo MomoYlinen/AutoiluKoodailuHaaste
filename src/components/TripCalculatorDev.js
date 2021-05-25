@@ -15,7 +15,6 @@ import cityCar from '../cars/car-city-model.svg'
 import Switch from '@material-ui/core/Switch';
 import useStyles from '../styles/useStyles'
 import fuelUseCalculator from '../utils/fuelUseCalculator'
-import axios from 'axios'
 
 const initialValues = {
   speed1:'',
@@ -48,7 +47,6 @@ const TripCalculatorDev = () => {
     const [travelinfo,setTravelInfo] = useState({})
     const [travelinfo2,setTravelInfo2] = useState({})
     const [show, setShow] = useState(true)
-    const [responseData,setResponseData] = useState('')
 
     const handleInputChange = (e) => {
       
@@ -66,20 +64,9 @@ const TripCalculatorDev = () => {
 
     const returnToForm = () =>{
       setValues(initialValues)
-      setResponseData('')
       setShow(true)
     }
 
-    const getAdress = (adressOrigin,adressDestination) => {
-      
-      axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${adressOrigin}&destinations=${adressDestination}&key=AIzaSyDaV9UicT_f-hxcy7NaoMh6rx21JY-LHFA`)
-        .then(function (response) {
-          setResponseData((response.data.rows[0].elements[0].distance.value)/1000)
-      })
-      
-      return
-  
-    }
 
   
     const calculateTimeandFuel = (event) => {
@@ -88,11 +75,6 @@ const TripCalculatorDev = () => {
 
       console.log(values.origin,values.destination)
 
-      if(state.checkedB){
-        getAdress(values.origin,values.destination)
-        values.distance = responseData
-
-      }
     
       const fuelUsed1 = fuelUseCalculator(fuelUse,values.speed1)
       const fuelUsed2 = fuelUseCalculator(fuelUse,values.speed2)
@@ -137,8 +119,8 @@ const TripCalculatorDev = () => {
         return time
       }
   
-    const {fuelused,traveltime,fuelUsed100} = travelinfo
-    const {fuelused2,traveltime2,fuelUsed200}=travelinfo2
+    const {fuelused,traveltime} = travelinfo
+    const {fuelused2,traveltime2}=travelinfo2
   
     const lessTime = `${fuelused ? (fuelused2-fuelused).toFixed(2): fuelused}`
     const moreGas = `${travelTimeConverter((traveltime-traveltime2))} `
@@ -151,7 +133,7 @@ const TripCalculatorDev = () => {
     const convertedFuelUse2= `${fuelused2 ? fuelused2.toFixed(2):fuelused2} litraa`
     
       return (
-        <div style={{background:'red', width:'100%'}}>
+        <div>
             <Grid container className={classes.grid} spacing={3} padding='50px'>
                 <Paper className={classes.paper}>
                 {show ? 

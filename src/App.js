@@ -11,9 +11,7 @@ function App() {
 
   return (
     <div>
-      <body>
       <TripCalculatorDev/>
-      </body>
     </div>
   );
 }
