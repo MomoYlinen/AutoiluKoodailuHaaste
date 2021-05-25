@@ -15,6 +15,7 @@ import cityCar from '../cars/car-city-model.svg'
 import Switch from '@material-ui/core/Switch';
 import useStyles from '../styles/useStyles'
 import fuelUseCalculator from '../utils/fuelUseCalculator'
+import axios from 'axios'
 
 const initialValues = {
   speed1:'',
@@ -47,6 +48,7 @@ const TripCalculatorDev = () => {
     const [travelinfo,setTravelInfo] = useState({})
     const [travelinfo2,setTravelInfo2] = useState({})
     const [show, setShow] = useState(true)
+    const [responseData, setResponseData] = useState('')
 
     const handleInputChange = (e) => {
       
@@ -67,13 +69,27 @@ const TripCalculatorDev = () => {
       setShow(true)
     }
 
+      const getAdress = (adressOrigin,adressDestination) => {
+        
+        axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${adressOrigin}&destinations=${adressDestination}&key=AIzaSyDaV9UicT_f-hxcy7NaoMh6rx21JY-LHFA`)
+          .then(function (response) {
+            setResponseData((response.data.rows[0].elements[0].distance.value)/1000)
+        })
+        
+        return
+    
+      }
+
 
   
     const calculateTimeandFuel = (event) => {
       event.preventDefault()
       setShow(false)
 
-      console.log(values.origin,values.destination)
+      if(state.checkedB) {
+        getAdress(values.origin,values.destination)
+        values.distance = responseData
+      }
 
     
       const fuelUsed1 = fuelUseCalculator(fuelUse,values.speed1)
