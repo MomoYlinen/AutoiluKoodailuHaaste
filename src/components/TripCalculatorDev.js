@@ -88,11 +88,6 @@ const TripCalculatorDev = () => {
 
       console.log(values.origin,values.destination)
 
-      if(state.checkedB){
-        getAdress(values.origin,values.destination)
-        values.distance = responseData
-
-      }
     
       const fuelUsed1 = fuelUseCalculator(fuelUse,values.speed1)
       const fuelUsed2 = fuelUseCalculator(fuelUse,values.speed2)
@@ -151,7 +146,7 @@ const TripCalculatorDev = () => {
     const convertedFuelUse2= `${fuelused2 ? fuelused2.toFixed(2):fuelused2} litraa`
     
       return (
-        <div style={{background:'red', width:'100%'}}>
+        <div>
             <Grid container className={classes.grid} spacing={3} padding='50px'>
                 <Paper className={classes.paper}>
                 {show ? 
@@ -211,11 +206,11 @@ const TripCalculatorDev = () => {
                 <div className={classes.address.addressStyle}>
                 <FormControl size="small" className={classes.address.addressField}>
                     <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.origin} name='origin' onChange={handleInputChange} placeholder='Distance' />
+                    <OutlinedInput id='component-outlined' value={values.origin} name='origin' id='origin' onChange={handleInputChange} placeholder='Distance' />
                 </FormControl>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.destination} name='destination' onChange={handleInputChange} placeholder='Distance' />
+                    <OutlinedInput id='component-outlined' value={values.destination} name='destination' id='destination' onChange={handleInputChange} placeholder='Distance' />
                 </FormControl>
                 </div>
                 </div>:
@@ -227,7 +222,7 @@ const TripCalculatorDev = () => {
                   </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.distance} name='distance' onChange={handleInputChange} placeholder='Distance' />
+                    <OutlinedInput id='component-outlined' value={values.distance} name='distance' id='distance' onChange={handleInputChange} placeholder='Distance' />
                 </FormControl>
                 </div>
                 }
@@ -239,7 +234,7 @@ const TripCalculatorDev = () => {
                   </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Speed/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.speed1} name='speed1' onChange={handleInputChange} placeholder='Speed' />
+                    <OutlinedInput id='component-outlined' value={values.speed1} name='speed1' id='speed1' onChange={handleInputChange} placeholder='Speed' />
                 </FormControl>
                 </div>
                 <div className= {state.checkedB ? classes.form.formCentering : classes.form.formCenteringzero}>
@@ -250,7 +245,7 @@ const TripCalculatorDev = () => {
                   </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Speed/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.speed2} name='speed2' onChange={handleInputChange}  placeholder='Speed' />
+                    <OutlinedInput id='component-outlined' value={values.speed2} name='speed2' id='speed2' onChange={handleInputChange}  placeholder='Speed' />
                 </FormControl>
                 </div>
                 <div className= {state.checkedB ? classes.buttonStyle.buttonStyle : classes.buttonStyle.buttonStyle2}>
