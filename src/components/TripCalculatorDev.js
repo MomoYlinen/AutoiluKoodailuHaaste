@@ -1,12 +1,10 @@
 import React, {useState} from 'react'
-import { makeStyles } from '@material-ui/core/styles';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
 import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Grid from '@material-ui/core/Grid';
-import {DriveEta,Speed,Directions,LocalGasStation, WatchLater} from '@material-ui/icons/'
+import {Speed,Directions,} from '@material-ui/icons/'
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import Typography from '@material-ui/core/Typography';
@@ -14,43 +12,25 @@ import Paper from '@material-ui/core/Paper';
 import miniVan from '../cars/minivan-car.svg'
 import sedanCar from '../cars/sedan-car-model.svg'
 import cityCar from '../cars/car-city-model.svg'
-import { createMuiTheme } from '@material-ui/core/styles';
 import Switch from '@material-ui/core/Switch';
+import useStyles from '../styles/useStyles'
+import fuelUseCalculator from '../utils/fuelUseCalculator'
+import axios from 'axios'
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    '& > *': {
-      margin: theme.spacing(3)
-    },
-  },
-  grid: {
-    flexGrow: 1,
-    flexDirection: 'row',
-    background:'#d32f2f',
-    padding:'5px 10px 10px 10px'
-  },
-  paper: {
-    height: 140,
-    width: 100,
-  },
-  control: {
-    padding: theme.spacing(2),
-  },
-  buttonGroup: {
-    display: 'flex',
-    flexDirection: 'column',
-    '& > *': {
-      margin: theme.spacing(1),
-    },
-  },
-}));
-
+const initialValues = {
+  speed1:'',
+  speed2:'',
+  distance:'',
+  origin:'',
+  destination:'',
+}
 
 const TripCalculatorDev = () => {
 
     const classes = useStyles()
 
-    const theme = createMuiTheme()
+    const margin = {padding:'30px 0px 0px 10px'}
+    const marginButton = {padding:'40px 0px 10px 150px'}
     
     const [alignment, setAlignment] = useState('left');
 
@@ -63,66 +43,66 @@ const TripCalculatorDev = () => {
       checkedB: true,
     });
 
-  
+    const [values , setValues] = useState(initialValues)
     const [fuelUse, setFuelUse] = useState(3.0)
-    const [speed1, setSpeed1] = useState()
-    const [speed2, setSpeed2] = useState()
-    const [distance, setDistance] = useState()
     const [travelinfo,setTravelInfo] = useState({})
     const [travelinfo2,setTravelInfo2] = useState({})
-  
-
     const [show, setShow] = useState(true)
+    const [responseData,setResponseData] = useState('')
 
-    const buttonText = show ? 'Use Adress' : 'Input distance manually'
+    const handleInputChange = (e) => {
+      
+      const { name, value } = e.target;
   
-    const handleClick = () => {
-      if (show===false) {
-        setShow(true)
-      }else if(show===true) {
-        setShow(false)
-      }
-    }
-    const handleSpeedChange1 = (event) => {
-      setSpeed1(event.target.value)
-    }
+      setValues({
+        ...values,
+        [name]: value,
+      });
+    };
   
-    const handleSpeedChange2 = (event) => {
-      setSpeed2(event.target.value)
-    }
-  
-  
-    const handledistanceChange = (event) => {
-      setDistance(event.target.value)
-    }
-
     const handleSwitchChange = (event) => {
       setState({ ...state, [event.target.name]: event.target.checked });
     };
 
-    const fuelUseCalculator = (fuelUse,speed) => {
-        const consumptionMultiplier = 1.009
-        let fuel = fuelUse
-        for(let i = 1; i <=speed; i++) {
-          fuel*=consumptionMultiplier
-        }
+    const returnToForm = () =>{
+      setValues(initialValues)
+      setResponseData('')
+      setShow(true)
+    }
 
-        return fuel
+    const getAdress = (adressOrigin,adressDestination) => {
+      
+      axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${adressOrigin}&destinations=${adressDestination}&key=AIzaSyDaV9UicT_f-hxcy7NaoMh6rx21JY-LHFA`)
+        .then(function (response) {
+          setResponseData((response.data.rows[0].elements[0].distance.value)/1000)
+      })
+      
+      return
+  
+    }
 
-      }
   
     const calculateTimeandFuel = (event) => {
       event.preventDefault()
       setShow(false)
-      const fuelUsed1 = fuelUseCalculator(fuelUse,speed1)
-      const fuelUsed2 = fuelUseCalculator(fuelUse,speed2)
+
+      console.log(values.origin,values.destination)
+
+      if(state.checkedB){
+        getAdress(values.origin,values.destination)
+        values.distance = responseData
+
+      }
+    
+      const fuelUsed1 = fuelUseCalculator(fuelUse,values.speed1)
+      const fuelUsed2 = fuelUseCalculator(fuelUse,values.speed2)
       
-      const travelTime1 = (distance/speed1)*60
-      const travelTime2 = (distance/speed2)*60
+      const travelTime1 = (values.distance/values.speed1)*60
+      const travelTime2 = (values.distance/values.speed2)*60
       
-      let fuelConsumptionOne = fuelUsed1*(distance/100)
+      let fuelConsumptionOne = fuelUsed1*(values.distance/100)
       
-      let fuelConsumptionTwo = fuelUsed2*(distance/100)
+      let fuelConsumptionTwo = fuelUsed2*(values.distance/100)
       
       const travelinfoObject1 = {
         fuelused: fuelConsumptionOne,
@@ -156,156 +136,124 @@ const TripCalculatorDev = () => {
     
         return time
       }
-    console.log(distance)
   
     const {fuelused,traveltime,fuelUsed100} = travelinfo
     const {fuelused2,traveltime2,fuelUsed200}=travelinfo2
   
     const lessTime = `${fuelused ? (fuelused2-fuelused).toFixed(2): fuelused}`
     const moreGas = `${travelTimeConverter((traveltime-traveltime2))} `
-    const speedDifference = `${speed2-speed1}`
+    const speedDifference = `${values.speed2-values.speed1}`
 
     const timeCoverted1 = travelTimeConverter(traveltime)
     const timeCoverted2 = travelTimeConverter(traveltime2)
 
-
-    const createTable = (speed,traveltime,fuelused) => {
-        return { speed,traveltime,fuelused};
-      }
     const convertedFuelUse = `${fuelused ? fuelused.toFixed(2):fuelused} litraa`
     const convertedFuelUse2= `${fuelused2 ? fuelused2.toFixed(2):fuelused2} litraa`
-
-    const paperStyle ={padding:'25px 15px 25px 15px',width:500, height:'100vhmin',margin:'20px auto', border:'1px solid' }
-    const results = {    display: 'flex',flexDirection: 'column', padding: '10px '}
-    const resultsHeader = {padding: '0px 0px 40px 0px' }
-    const showResults = {padding: '0px 0px 20px 0px' }
-    const answerStyle = {padding: '10px 5px 10px 5px' }
-    const answerBox = {padding:'50px 0px 0px 0px', items:"center"}
-
-    const buttonContainer = {height:'70px', padding:'10px 0px 100px 0px'}
-    const buttonGroup = {width:'100%', padding:'10px'}
-    const toggleButtons = {width:'33%', padding:'10px', height:'70px'}
-    const label = {width:'80%', height:'60px'}
-    const label1 = {width:'90%', height:'60px'}
-    const labelImage = {width:'55px'}
-
-    const switchLabel = {padding:'10px'}
-
-    const addressStyle = {display:'flex', flexDirection:'row'}
-    const addressField = {padding:'0px 15px 0px 0px'  }
-    const addressLabel = {padding:'0 0 10px 120px'}
-
-    const formStyle = {justify:'center'}
-    const formCentering = {padding: '0px 0px 11px 120px'}
-    const formCenteringzero = {padding: '0px 0px 0px 0px'}
-    const formlabel = {padding: '0px 0px 20px 0px'}
-
-    const buttonStyle = {padding: '0px 0px 0px 170px'}
-    const buttonStyle2 = {padding: '10px 0px 0px 60px'}
-
-    const gridSeparations = {padding :'10px 0px 0px 0px'}
     
- 
       return (
-        <div>
+        <div style={{background:'red', width:'100%'}}>
             <Grid container className={classes.grid} spacing={3} padding='50px'>
-                <Paper style={paperStyle}>
+                <Paper className={classes.paper}>
                 {show ? 
                 <div>
                 <Grid item xs={12}>
-                    <Grid container justify="center" style={buttonContainer}>
+                    <Grid container justify="center" className={classes.buttonGroupA.buttonContainer}>
                     <ToggleButtonGroup
                         value={alignment}
                         exclusive
                         onChange={handleAlignment}
                         aria-label="text-aligment"
-                        style={buttonGroup}
+                        className={classes.buttonGroupA.buttonGroup}
                         >
-                        <ToggleButton value="Car1" aria-label="left aligned" onClick={() => setFuelUse(3.0)} style={toggleButtons}>
-                           <label style={label1}> <img src={cityCar} style={labelImage}/>Auto 1</label>
+                        <ToggleButton value="Car1" aria-label="left aligned" onClick={() => setFuelUse(3.0)} className={classes.buttonGroupA.toggleButtons}>
+                           <label className={classes.buttonGroupA.label1}> <img src={cityCar} className={classes.buttonGroupA.labelImage} alt={cityCar}/>Auto 1</label>
                         </ToggleButton>
-                        <ToggleButton  value="Car2"  aria-label="centered" onClick={() => setFuelUse(3.5)} style={toggleButtons}>
-                        <label style={label} > <img src={sedanCar} style={labelImage}/> Auto 2 </label>
+                        <ToggleButton  value="Car2"  aria-label="centered" onClick={() => setFuelUse(3.5)} className={classes.buttonGroupA.toggleButtons}>
+                        <label className={classes.buttonGroupA.label1} > <img src={sedanCar} className={classes.buttonGroupA.labelImage} alt={sedanCar}/> Auto 2 </label>
                         </ToggleButton>
-                        <ToggleButton  value="Car3" aria-label="right aligned" onClick={() => setFuelUse(4.0)} style={toggleButtons}>
-                        <label style={label} > <img src={miniVan} style={labelImage}/> Auto 3 </label>
+                        <ToggleButton  value="Car3" aria-label="right aligned" onClick={() => setFuelUse(4.0)} className={classes.buttonGroupA.toggleButtons}>
+                        <label className={classes.buttonGroupA.label1} > <img src={miniVan} className={classes.buttonGroupA.labelImage} alt={miniVan}/> Auto 3 </label>
                         </ToggleButton>
                         </ToggleButtonGroup>
                     </Grid>
                     <Grid className={classes.buttonGroup}>
                       <Grid item xs={12}>
-                      <Grid container style={switchLabel} justify="center">
+                      <Grid container className={classes.switch.switchLabel} justify="center">
                         <div>
+                        <Typography variant='h6'>
                           Kirjoita etäisyys
+                        </Typography>
                         </div>
                       <Switch
                             checked={state.checkedB}
                             onChange={handleSwitchChange}
-                            color="primary"
+                            color="secondary"
                             name="checkedB"
                             inputProps={{ 'aria-label': 'primary checkbox' }}
                           />
                         <div>
+                        <Typography variant='h6'>
                           Kirjoita osoite
+                        </Typography>
                         </div>
                       </Grid>
                     </Grid>
-                  <Grid item xs={12} style={formStyle}>
+                  <Grid item xs={12} className={classes.form.formStyle}>
                   <Grid container justify="center">
             <form className={classes.root} onSubmit={calculateTimeandFuel} variant='outlined'>
               {state.checkedB ?
                 <div>
-                <div style={addressLabel}>
+                <div className={classes.address.addressLabel}>
                     <Typography variant='h5'>
                     Kirjoita Osoite
                     </Typography>
                   </div>
-                <div style={addressStyle}>
-                <FormControl size="small" style={addressField}>
+                <div className={classes.address.addressStyle}>
+                <FormControl size="small" className={classes.address.addressField}>
                     <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={distance} onChange={handledistanceChange} placeholder='Distance' />
+                    <OutlinedInput id='component-outlined' value={values.origin} name='origin' onChange={handleInputChange} placeholder='Distance' />
                 </FormControl>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={distance} onChange={handledistanceChange} placeholder='Distance' />
+                    <OutlinedInput id='component-outlined' value={values.destination} name='destination' onChange={handleInputChange} placeholder='Distance' />
                 </FormControl>
                 </div>
                 </div>:
                 <div>
-                  <div style={formlabel}>
+                  <div className={classes.form.formlabel}>
                     <Typography variant='h5'>
                     Kirjoita etäisyys
                     </Typography>
                   </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={distance} onChange={handledistanceChange} placeholder='Distance' />
+                    <OutlinedInput id='component-outlined' value={values.distance} name='distance' onChange={handleInputChange} placeholder='Distance' />
                 </FormControl>
                 </div>
                 }
-                <div style= {state.checkedB ? formCentering : formCenteringzero} >
-                <div style={formlabel}>
+                <div className= {state.checkedB ? classes.form.formCentering : classes.form.formCenteringzero} >
+                <div className={classes.form.formlabel}>
                     <Typography variant='h5'>
                     Kirjoita nopeus
                     </Typography>
                   </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Speed/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={speed1} onChange={handleSpeedChange1} placeholder='Speed' />
+                    <OutlinedInput id='component-outlined' value={values.speed1} name='speed1' onChange={handleInputChange} placeholder='Speed' />
                 </FormControl>
                 </div>
-                <div style= {state.checkedB ? formCentering : formCenteringzero}>
-                <div style={formlabel}>
+                <div className= {state.checkedB ? classes.form.formCentering : classes.form.formCenteringzero}>
+                <div className={classes.form.formlabel}>
                     <Typography variant='h5'>
                     Kirjoita nopeus
                     </Typography>
                   </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Speed/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={speed2} onChange={handleSpeedChange2}  placeholder='Speed' />
+                    <OutlinedInput id='component-outlined' value={values.speed2} name='speed2' onChange={handleInputChange}  placeholder='Speed' />
                 </FormControl>
                 </div>
-                <div style= {state.checkedB ? buttonStyle : buttonStyle2}>
+                <div className= {state.checkedB ? classes.buttonStyle.buttonStyle : classes.buttonStyle.buttonStyle2}>
                 <Button variant="contained" color="primary" type="submit" >
                     SEND
                 </Button>
@@ -323,20 +271,20 @@ const TripCalculatorDev = () => {
               <Grid item xs={12}>
               <Grid container padding='10px' justify="center">
                 <Typography variant='h3'>
-                  <div style={results}>
+                  <div className={classes.results.results}>
                   Tulokset
                   </div>
                 </Typography>
                 </Grid>
               </Grid>
-              <Grid item xs={12} style={gridSeparations}>
-              <Grid container padding='10px' justify="center" style={gridSeparations}>
+              <Grid item xs={12} className={classes.gridSeparations}>
+              <Grid container padding='10px' justify="center" className={classes.gridSeparations}>
                 <Typography variant='h5'>
-                  <div style={results}>
+                  <div className={classes.results.results}>
                   Etäisyys
                   </div>
-                  <div style={resultsHeader}>
-                    {distance} Km
+                  <div className={classes.results.resultsHeader}>
+                    {values.distance} Km
                   </div>
                 </Typography>
                 </Grid>
@@ -344,51 +292,51 @@ const TripCalculatorDev = () => {
             <Grid item xs={12}>
               <Grid container>
             <Grid item xs={3}>
-              <Grid container padding='10px' style={results}>
+              <Grid container padding='10px' className={classes.results.results} style={margin}>
                 <Typography variant='h5'>
-                  <div style={resultsHeader}>
+                  <div className={classes.results.resultsHeader}>
                     Nopeus
                   </div>
                 </Typography>
                 <Typography variant='h6'>
-                <div style={showResults}>
-               {speed1} Km
+                <div className={classes.results.showResults}>
+               {values.speed1} Km
                 </div>
-                <div style={showResults}>
-                  {speed2} Km
+                <div className={classes.results.showResults}>
+                  {values.speed2} Km
                 </div>
                 </Typography>
                 </Grid>
                 </Grid>
               <Grid item xs={6}>
-              <Grid container padding='10px' style={results} justify='center'>
-              <Typography variant='h5' style={resultsHeader}>
+              <Grid container padding='10px' className={classes.results.results} justify='center' style={margin}>
+              <Typography variant='h5' className={classes.results.resultsHeader}>
                   <div>
                     Matka-aika
                   </div>
                 </Typography>
                 <Typography variant='h6'>
-                <div style={showResults}>
+                <div className={classes.results.showResults}>
                 {timeCoverted1}
                 </div>
-                <div style={showResults}>
+                <div className={classes.results.showResults}>
                 {timeCoverted2}
                 </div>
                 </Typography>
                 </Grid>
               </Grid>
               <Grid item xs={3}>
-              <Grid container padding='10px' style={results}>
-              <Typography variant='h5' style={resultsHeader}>
+              <Grid container padding='10px' className={classes.results} style={margin}>
+              <Typography variant='h5' className={classes.results.resultsHeader}>
                   <div>
                     Kulutus
                   </div>
                 </Typography>
                 <Typography variant='h6'>
-                <div style={showResults}>
+                <div className={classes.results.showResults}>
                 {convertedFuelUse}
                 </div>
-                <div style={showResults}>
+                <div className={classes.results.showResults}>
                 {convertedFuelUse2}
                 </div>
                 </Typography>
@@ -397,14 +345,14 @@ const TripCalculatorDev = () => {
             </Grid>
             </Grid>
             <Grid item xs={12}>
-              <Grid container style={answerBox}>
+              <Grid container className ={classes.results.answerBox} style={margin}>
                 <Typography variant='h5'>
-                  <div style={answerStyle}>
+                  <div className={classes.results.answerStyle}>
                   Kulkemalla  {speedDifference} kilometriä nopeampaa saavutettaan {moreGas} 
                   lyhyempi matka-aika, mutta polttoainekulutus kasvaa {lessTime} litraa.
                   </div>
-                  <div>
-                  <Button variant="contained" color="primary" type='button' onClick={() => setShow(true)}>
+                  <div style={marginButton}>
+                  <Button variant="contained" color="primary" type='button' onClick={() => returnToForm()}>
                     RETURN
                 </Button>
                 </div>
