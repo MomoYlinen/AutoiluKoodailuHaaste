@@ -15,7 +15,6 @@ import cityCar from '../cars/car-city-model.svg'
 import Switch from '@material-ui/core/Switch';
 import useStyles from '../styles/useStyles'
 import fuelUseCalculator from '../utils/fuelUseCalculator'
-import axios from 'axios'
 
 const initialValues = {
   speed1:'',
@@ -48,7 +47,6 @@ const TripCalculatorDev = () => {
     const [travelinfo,setTravelInfo] = useState({})
     const [travelinfo2,setTravelInfo2] = useState({})
     const [show, setShow] = useState(true)
-    const [responseData,setResponseData] = useState('')
 
     const handleInputChange = (e) => {
       
@@ -66,20 +64,9 @@ const TripCalculatorDev = () => {
 
     const returnToForm = () =>{
       setValues(initialValues)
-      setResponseData('')
       setShow(true)
     }
 
-    const getAdress = (adressOrigin,adressDestination) => {
-      
-      axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${adressOrigin}&destinations=${adressDestination}&key=AIzaSyDaV9UicT_f-hxcy7NaoMh6rx21JY-LHFA`)
-        .then(function (response) {
-          setResponseData((response.data.rows[0].elements[0].distance.value)/1000)
-      })
-      
-      return
-  
-    }
 
   
     const calculateTimeandFuel = (event) => {
@@ -132,8 +119,8 @@ const TripCalculatorDev = () => {
         return time
       }
   
-    const {fuelused,traveltime,fuelUsed100} = travelinfo
-    const {fuelused2,traveltime2,fuelUsed200}=travelinfo2
+    const {fuelused,traveltime} = travelinfo
+    const {fuelused2,traveltime2}=travelinfo2
   
     const lessTime = `${fuelused ? (fuelused2-fuelused).toFixed(2): fuelused}`
     const moreGas = `${travelTimeConverter((traveltime-traveltime2))} `
@@ -206,11 +193,11 @@ const TripCalculatorDev = () => {
                 <div className={classes.address.addressStyle}>
                 <FormControl size="small" className={classes.address.addressField}>
                     <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.origin} name='origin' id='origin' onChange={handleInputChange} placeholder='Distance' />
+                    <OutlinedInput id='component-outlined' value={values.origin} name='origin' onChange={handleInputChange} placeholder='Distance' />
                 </FormControl>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.destination} name='destination' id='destination' onChange={handleInputChange} placeholder='Distance' />
+                    <OutlinedInput id='component-outlined' value={values.destination} name='destination' onChange={handleInputChange} placeholder='Distance' />
                 </FormControl>
                 </div>
                 </div>:
@@ -222,7 +209,7 @@ const TripCalculatorDev = () => {
                   </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.distance} name='distance' id='distance' onChange={handleInputChange} placeholder='Distance' />
+                    <OutlinedInput id='component-outlined' value={values.distance} name='distance' onChange={handleInputChange} placeholder='Distance' />
                 </FormControl>
                 </div>
                 }
@@ -234,7 +221,7 @@ const TripCalculatorDev = () => {
                   </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Speed/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.speed1} name='speed1' id='speed1' onChange={handleInputChange} placeholder='Speed' />
+                    <OutlinedInput id='component-outlined' value={values.speed1} name='speed1' onChange={handleInputChange} placeholder='Speed' />
                 </FormControl>
                 </div>
                 <div className= {state.checkedB ? classes.form.formCentering : classes.form.formCenteringzero}>
@@ -245,7 +232,7 @@ const TripCalculatorDev = () => {
                   </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Speed/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.speed2} name='speed2' id='speed2' onChange={handleInputChange}  placeholder='Speed' />
+                    <OutlinedInput id='component-outlined' value={values.speed2} name='speed2' onChange={handleInputChange}  placeholder='Speed' />
                 </FormControl>
                 </div>
                 <div className= {state.checkedB ? classes.buttonStyle.buttonStyle : classes.buttonStyle.buttonStyle2}>
