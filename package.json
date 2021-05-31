@@ -13,6 +13,7 @@
     "@testing-library/user-event": "^12.8.3",
     "axios": "^0.21.1",
     "cors": "^2.8.5",
+    "distance-matrix-api": "^1.0.0",
     "google-distance-matrix": "^1.1.1",
     "google-maps-react": "^2.0.6",
     "material-ui": "^0.20.2",

@@ -15,7 +15,10 @@ import cityCar from '../cars/car-city-model.svg'
 import Switch from '@material-ui/core/Switch';
 import useStyles from '../styles/useStyles'
 import fuelUseCalculator from '../utils/fuelUseCalculator'
-import axios from 'axios'
+
+var distance = require('distance-matrix-api')
+
+distance.key('AlphaDMAx1F43ddFNPp16dRHOiL4yDajp9ymJdKA')
 
 const initialValues = {
   speed1:'',
@@ -26,6 +29,7 @@ const initialValues = {
 }
 
 const TripCalculatorDev = () => {
+
 
     const classes = useStyles()
 
@@ -48,6 +52,7 @@ const TripCalculatorDev = () => {
     const [travelinfo,setTravelInfo] = useState({})
     const [travelinfo2,setTravelInfo2] = useState({})
     const [show, setShow] = useState(true)
+    const [distanceResult, setDistanceResult] = useState('')
     const [responseData, setResponseData] = useState('')
 
     const handleInputChange = (e) => {
@@ -65,17 +70,18 @@ const TripCalculatorDev = () => {
     };
 
     const returnToForm = () =>{
-      setValues(initialValues)
       setShow(true)
     }
 
       const getAdress = (adressOrigin,adressDestination) => {
-        
-        axios.get(`https://maps.googleapis.com/maps/api/distancematrix/json?origins=${adressOrigin}&destinations=${adressDestination}&key=AIzaSyDaV9UicT_f-hxcy7NaoMh6rx21JY-LHFA`)
-          .then(function (response) {
-            setResponseData((response.data.rows[0].elements[0].distance.value)/1000)
+        var origins = [adressOrigin];
+        var destinations = [adressDestination];
+      
+        distance.matrix(origins, destinations, function (err, distances) {
+            if (!err)
+            console.log(distances)
+            setResponseData(distances.rows[0].elements[0].distance.value)
         })
-        
         return
     
       }
@@ -88,19 +94,23 @@ const TripCalculatorDev = () => {
 
       if(state.checkedB) {
         getAdress(values.origin,values.destination)
-        values.distance = responseData
+        setDistanceResult(responseData/1000)
+        console.log(distanceResult)
+      }
+      if(!state.checkedB){
+        setDistanceResult(values.distance)
       }
 
     
       const fuelUsed1 = fuelUseCalculator(fuelUse,values.speed1)
       const fuelUsed2 = fuelUseCalculator(fuelUse,values.speed2)
       
-      const travelTime1 = (values.distance/values.speed1)*60
-      const travelTime2 = (values.distance/values.speed2)*60
+      const travelTime1 = (distanceResult/values.speed1)*60
+      const travelTime2 = (distanceResult/values.speed2)*60
       
-      let fuelConsumptionOne = fuelUsed1*(values.distance/100)
+      let fuelConsumptionOne = fuelUsed1*(distanceResult/100)
       
-      let fuelConsumptionTwo = fuelUsed2*(values.distance/100)
+      let fuelConsumptionTwo = fuelUsed2*(distanceResult/100)
       
       const travelinfoObject1 = {
         fuelused: fuelConsumptionOne,
@@ -282,7 +292,7 @@ const TripCalculatorDev = () => {
                   Etäisyys
                   </div>
                   <div className={classes.results.resultsHeader}>
-                    {values.distance} Km
+                    {distanceResult} Km
                   </div>
                 </Typography>
                 </Grid>
