@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
@@ -15,18 +15,12 @@ import cityCar from '../cars/car-city-model.svg'
 import Switch from '@material-ui/core/Switch';
 import useStyles from '../styles/useStyles'
 import fuelUseCalculator from '../utils/fuelUseCalculator'
+import axios from 'axios'
 
-var distance = require('distance-matrix-api')
+var distanceMatrix = require('distance-matrix-api')
 
-distance.key('AlphaDMAx1F43ddFNPp16dRHOiL4yDajp9ymJdKA')
+distanceMatrix.key('AlphaDMAx1F43ddFNPp16dRHOiL4yDajp9ymJdKA')
 
-const initialValues = {
-  speed1:'',
-  speed2:'',
-  distance:'',
-  origin:'',
-  destination:'',
-}
 
 const TripCalculatorDev = () => {
 
@@ -47,23 +41,33 @@ const TripCalculatorDev = () => {
       checkedB: true,
     });
 
-    const [values , setValues] = useState(initialValues)
     const [fuelUse, setFuelUse] = useState(3.0)
     const [travelinfo,setTravelInfo] = useState({})
     const [travelinfo2,setTravelInfo2] = useState({})
     const [show, setShow] = useState(true)
-    const [distanceResult, setDistanceResult] = useState('')
-    const [responseData, setResponseData] = useState('')
 
-    const handleInputChange = (e) => {
-      
-      const { name, value } = e.target;
-  
-      setValues({
-        ...values,
-        [name]: value,
-      });
-    };
+    const [speed1, setSpeed1] = useState('')
+    const [speed2, setSpeed2] = useState('')
+    const [origin, setOrigin] = useState('')
+    const [destination, setDestination] = useState('')
+    const [distance, setDistance] = useState('')
+
+    const handleSpeed1 = (event) =>{
+      setSpeed1(event.target.value)
+    }
+    const handleSpeed2 = (event) =>{
+      setSpeed2(event.target.value)
+    }
+    const handleOrigin = (event) =>{
+      setOrigin(event.target.value)
+    }
+    const handleDestination = (event) =>{
+      setDestination(event.target.value)
+    }
+    const handleDistance = (event) =>{
+      setDistance(event.target.value)
+    }
+
   
     const handleSwitchChange = (event) => {
       setState({ ...state, [event.target.name]: event.target.checked });
@@ -73,44 +77,38 @@ const TripCalculatorDev = () => {
       setShow(true)
     }
 
-      const getAdress = (adressOrigin,adressDestination) => {
-        var origins = [adressOrigin];
-        var destinations = [adressDestination];
-      
-        distance.matrix(origins, destinations, function (err, distances) {
-            if (!err)
-            console.log(distances)
-            setResponseData(distances.rows[0].elements[0].distance.value)
+    const getAdress = (adressOrigin,adressDestination, event) => {
+      var origins = [adressOrigin];
+      var destinations = [adressDestination];
+
+    
+      distanceMatrix.matrix(origins, destinations, function (err, distances) {
+          if (!err)
+          console.log(distances)
+          setDistance(distances.rows[0].elements[0].distance.value/1000)
         })
         return
-    
-      }
+    }
 
 
   
     const calculateTimeandFuel = (event) => {
-      event.preventDefault()
       setShow(false)
 
-      if(state.checkedB) {
-        getAdress(values.origin,values.destination)
-        setDistanceResult(responseData/1000)
-        console.log(distanceResult)
-      }
-      if(!state.checkedB){
-        setDistanceResult(values.distance)
+      console.log('ollaan täällä')
+      if(state.checkedB){
+        getAdress(origin,destination)
       }
 
-    
-      const fuelUsed1 = fuelUseCalculator(fuelUse,values.speed1)
-      const fuelUsed2 = fuelUseCalculator(fuelUse,values.speed2)
+      const fuelUsed1 = fuelUseCalculator(fuelUse,speed1)
+      const fuelUsed2 = fuelUseCalculator(fuelUse,speed2)
       
-      const travelTime1 = (distanceResult/values.speed1)*60
-      const travelTime2 = (distanceResult/values.speed2)*60
+      const travelTime1 = (distance/speed1)*60
+      const travelTime2 = (distance/speed2)*60
       
-      let fuelConsumptionOne = fuelUsed1*(distanceResult/100)
+      let fuelConsumptionOne = fuelUsed1*(distance/100)
       
-      let fuelConsumptionTwo = fuelUsed2*(distanceResult/100)
+      let fuelConsumptionTwo = fuelUsed2*(distance/100)
       
       const travelinfoObject1 = {
         fuelused: fuelConsumptionOne,
@@ -150,7 +148,7 @@ const TripCalculatorDev = () => {
   
     const lessTime = `${fuelused ? (fuelused2-fuelused).toFixed(2): fuelused}`
     const moreGas = `${travelTimeConverter((traveltime-traveltime2))} `
-    const speedDifference = `${values.speed2-values.speed1}`
+    const speedDifference = `${speed2-speed1}`
 
     const timeCoverted1 = travelTimeConverter(traveltime)
     const timeCoverted2 = travelTimeConverter(traveltime2)
@@ -219,11 +217,11 @@ const TripCalculatorDev = () => {
                 <div className={classes.address.addressStyle}>
                 <FormControl size="small" className={classes.address.addressField}>
                     <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.origin} name='origin' onChange={handleInputChange} placeholder='Distance' />
+                    <OutlinedInput id='component-outlined' value={origin} name='origin' onChange={handleOrigin} placeholder='Distance' />
                 </FormControl>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.destination} name='destination' onChange={handleInputChange} placeholder='Distance' />
+                    <OutlinedInput id='component-outlined' value={destination} name='destination' onChange={handleDestination} placeholder='Distance' />
                 </FormControl>
                 </div>
                 </div>:
@@ -235,7 +233,7 @@ const TripCalculatorDev = () => {
                   </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.distance} name='distance' onChange={handleInputChange} placeholder='Distance' />
+                    <OutlinedInput id='component-outlined' value={distance} name='distance' onChange={handleDistance} placeholder='Distance' />
                 </FormControl>
                 </div>
                 }
@@ -247,7 +245,7 @@ const TripCalculatorDev = () => {
                   </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Speed/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.speed1} name='speed1' onChange={handleInputChange} placeholder='Speed' />
+                    <OutlinedInput id='component-outlined' value={speed1} name='speed1' onChange={handleSpeed1} placeholder='Speed' />
                 </FormControl>
                 </div>
                 <div className= {state.checkedB ? classes.form.formCentering : classes.form.formCenteringzero}>
@@ -258,7 +256,7 @@ const TripCalculatorDev = () => {
                   </div>
                 <FormControl size="small">
                     <InputLabel htmlFor='component-outlined'><Speed/></InputLabel>
-                    <OutlinedInput id='component-outlined' value={values.speed2} name='speed2' onChange={handleInputChange}  placeholder='Speed' />
+                    <OutlinedInput id='component-outlined' value={speed2} name='speed2' onChange={handleSpeed2}  placeholder='Speed' />
                 </FormControl>
                 </div>
                 <div className= {state.checkedB ? classes.buttonStyle.buttonStyle : classes.buttonStyle.buttonStyle2}>
@@ -292,7 +290,7 @@ const TripCalculatorDev = () => {
                   Etäisyys
                   </div>
                   <div className={classes.results.resultsHeader}>
-                    {distanceResult} Km
+                    {distance} Km
                   </div>
                 </Typography>
                 </Grid>
@@ -308,10 +306,10 @@ const TripCalculatorDev = () => {
                 </Typography>
                 <Typography variant='h6'>
                 <div className={classes.results.showResults}>
-               {values.speed1} Km
+               {speed1} Km
                 </div>
                 <div className={classes.results.showResults}>
-                  {values.speed2} Km
+                  {speed2} Km
                 </div>
                 </Typography>
                 </Grid>
