@@ -24,14 +24,17 @@ const TripCalculatorDev = () => {
     const [distance, setDistance] = useState('')
 
     const handleSpeed1 = (event) =>{
-      setSpeed1(event.target.value)
+      const addValue = event.target.value.trim()
+      setSpeed1(addValue)
     }
     const handleSpeed2 = (event) =>{
-      setSpeed2(event.target.value)
+      const addValue = event.target.value.trim()
+      setSpeed2(addValue)
     }
 
     const handleDistance = (event) =>{
-      setDistance(event.target.value)
+      const addValue = event.target.value.trim()
+      setDistance(addValue)
     }
 
     const returnToForm = () =>{
@@ -52,6 +55,12 @@ const TripCalculatorDev = () => {
     
 
     const calculateTimeandFuel = (event) => {
+      if (speed1 === '' || speed2 === '' || distance === ''){
+        window.alert('Syötä pyydetyt arvot')
+        return
+      }else if(speed1 < 0 || speed2 < 0 || distance < 0) {
+        window.alert('Anna positiivinen luku')
+      }else{
       setShow(false)
 
       const fuelUsed1 = fuelUseCalculator(fuelUse,speed1)
@@ -78,6 +87,7 @@ const TripCalculatorDev = () => {
   
       setTravelInfo(travelinfoObject1)
       setTravelInfo2(travelinfoObject2)
+    }
   
     }
 

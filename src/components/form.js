@@ -1,6 +1,5 @@
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
-import OutlinedInput from '@material-ui/core/OutlinedInput';
 import FilledInput from '@material-ui/core/FilledInput';
 import {Speed,Directions,} from '@material-ui/icons/'
 import ToggleButton from '@material-ui/lab/ToggleButton';
@@ -52,22 +51,22 @@ const Form = (props) => {
                   </Typography>
                   <FormControl variant="filled">
                     <InputLabel htmlFor="component-filled"><Directions/></InputLabel>
-                    <FilledInput id="component-filled" value={props.distance} onChange={props.handleDistance} />
+                    <FilledInput id="component-filled" value={props.distance} onChange={props.handleDistance} type='number'/>
                   </FormControl>
                   <Typography variant='h5'>
                     Kirjoita nopeus
                   </Typography>
-              <FormControl size="small">
-                <InputLabel htmlFor='component-outlined'><Speed/></InputLabel>
-                <OutlinedInput id='component-outlined' value={props.speed1} name='speed1' onChange={props.handleSpeed1} placeholder='Speed' />
-              </FormControl>
+                  <FormControl variant="filled">
+                    <InputLabel htmlFor="component-filled"><Speed/></InputLabel>
+                    <FilledInput id="component-filled" value={props.speed1} onChange={props.handleSpeed1} type='number'/>
+                  </FormControl>
                   <Typography variant='h5'>
                     Kirjoita nopeus
                   </Typography>
-              <FormControl size="small">
-                <InputLabel htmlFor='component-outlined'><Speed/></InputLabel>
-                <OutlinedInput id='component-outlined' value={props.speed2} name='speed2' onChange={props.handleSpeed2}  placeholder='Speed' />
-              </FormControl>
+                  <FormControl variant="filled">
+                    <InputLabel htmlFor="component-filled"><Speed/></InputLabel>
+                    <FilledInput id="component-filled" value={props.speed2} onChange={props.handleSpeed2} type='number'/>
+                  </FormControl>
                 <div style= {divStyles.button.buttonStyle}>
               <Button variant="contained" color="primary" type={props.type} >
                 SEND
