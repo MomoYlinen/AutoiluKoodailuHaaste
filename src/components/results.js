@@ -12,7 +12,7 @@ const Results = (props) => {
 
     return (
     <>
-        <Grid container className={classes.grid} spacing={3} padding='50px'>
+        <Grid container className={classes.grid} spacing={2} padding='50px'>
             <Paper className={classes.paper}>
                 <Grid item xs={12}>
                     <Grid container padding='10px'>
@@ -25,7 +25,7 @@ const Results = (props) => {
                         </Typography>
                     </Grid>
                 </Grid>
-                <Grid item xs={12} className={classes.gridSeparations}>
+                <Grid item xs={12}>
                     <Grid container padding='10px' justify="center" className={classes.gridSeparations}>
                         <Typography variant='h5'>
                             <div style={divStyles.results.results}>
@@ -38,7 +38,7 @@ const Results = (props) => {
                     </Grid>
                 </Grid>
                 <Grid item xs={3}>
-                    <Grid container padding='10px' className={classes.results.results}>
+                    <Grid container padding='10px' className={classes.results.results} justify='center'>
                         <Typography variant='h5'>
                             <div style={divStyles.results.resultsHeader}>
                                 Nopeus
@@ -72,7 +72,7 @@ const Results = (props) => {
                     </Grid>
                 </Grid>
                 <Grid item xs={3}>
-                    <Grid container padding='10px' className={classes.results}>
+                    <Grid container padding='10px' className={classes.results} justify='center'>
                         <Typography variant='h5' className={classes.results.resultsHeader}>
                             <div style={divStyles.results.resultsHeader}>
                                 Kulutus
@@ -97,12 +97,16 @@ const Results = (props) => {
                                 Kulkemalla  {props.speedDifference} kilometriä nopeampaa saavutettaan {props.moreGas} 
                                 lyhyempi matka-aika, mutta polttoainekulutus kasvaa {props.lessTime} litraa.
                             </div>
-                            <div style={divStyles.results.answerButton}>
+                        </Typography>
+                    </Grid>
+                </Grid>
+                <Grid item xs={12}>
+                    <Grid container justify="center" padding ='20px 0px 0px 0px'>
+                        <div style={divStyles.results.answerButton}>
                         <Button variant="contained" color="primary" type='button' onClick={props.handlereturn}>
                             RETURN
                         </Button>
-                            </div>
-                        </Typography>
+                        </div>
                     </Grid>
                 </Grid>
             </Paper>

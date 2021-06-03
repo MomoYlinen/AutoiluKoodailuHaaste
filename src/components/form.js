@@ -1,6 +1,7 @@
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import OutlinedInput from '@material-ui/core/OutlinedInput';
+import FilledInput from '@material-ui/core/FilledInput';
 import {Speed,Directions,} from '@material-ui/icons/'
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
@@ -49,10 +50,10 @@ const Form = (props) => {
                   <Typography variant='h5'>
                     Kirjoita etäisyys
                   </Typography>
-              <FormControl size="small">
-                <InputLabel htmlFor='component-outlined'><Directions/></InputLabel>
-                <OutlinedInput id='component-outlined' value={props.distance} name='distance' onChange={props.handleDistance} placeholder='Distance' />
-              </FormControl>
+                  <FormControl variant="filled">
+                    <InputLabel htmlFor="component-filled"><Directions/></InputLabel>
+                    <FilledInput id="component-filled" value={props.distance} onChange={props.handleDistance} />
+                  </FormControl>
                   <Typography variant='h5'>
                     Kirjoita nopeus
                   </Typography>

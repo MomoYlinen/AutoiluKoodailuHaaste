@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import fuelUseCalculator from '../utils/fuelUseCalculator'
 import FormSubmit from './form'
 import Results from './results';
+import '../styles/dev.css';
 
 const TripCalculatorDev = () => {
 
@@ -111,13 +112,17 @@ const TripCalculatorDev = () => {
     
       return (
         <>
-          {show ?
-              <FormSubmit distance={distance} handleDistance={handleDistance} speed1={speed1} handleSpeed1={handleSpeed1} speed2={speed2} handleSpeed2={handleSpeed2} type={'submit'}
+        <div className={`card ${show ? '' : 'show'} `}>
+        {show ? 
+          <div className='front'>
+          <FormSubmit distance={distance} handleDistance={handleDistance} speed1={speed1} handleSpeed1={handleSpeed1} speed2={speed2} handleSpeed2={handleSpeed2} type={'submit'}
                 calculateTimeandFuel={calculateTimeandFuel} fuelchange1={handleFuelChange1} fuelchange2={handleFuelChange2} fuelchange3={handleFuelChange3} alignment={alignment} handleAlignment={handleAlignment}/>
-            :
-              <Results distance={distance} speed1={speed1} speed2={speed2} timeCoverted1={timeCoverted1} timeCoverted2={timeCoverted2}
+          </div>:
+          <div className="back">
+          <Results distance={distance} speed1={speed1} speed2={speed2} timeCoverted1={timeCoverted1} timeCoverted2={timeCoverted2}
                 convertedFuelUse={convertedFuelUse} convertedFuelUse2={convertedFuelUse2} speedDifference={speedDifference} moreGas={moreGas} lessTime={lessTime} handlereturn={returnToForm}/>
-          }
+          </div>}
+          </div>
         </>
         
       )
