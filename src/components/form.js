@@ -13,6 +13,7 @@ import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
+import '../App.css'
 
 
 const Form = (props) => {
@@ -23,6 +24,7 @@ const Form = (props) => {
 <>
   <Grid container className={classes.grid} spacing={6}>
     <Paper className={classes.paper}>
+      <div className='backround'>
         <Grid item xs={12}>
           <Grid container justify="center" className={classes.buttonGroupA.buttonContainer}>
             <ToggleButtonGroup
@@ -69,12 +71,13 @@ const Form = (props) => {
                   </FormControl>
                 <div style= {divStyles.button.buttonStyle}>
               <Button variant="contained" color="primary" type={props.type} >
-                SEND
+                HAE
               </Button>
                 </div>
             </form>
         </Grid>
       </Grid>
+      </div>
     </Paper>
   </Grid>
 </>

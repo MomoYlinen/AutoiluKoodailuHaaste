@@ -3,14 +3,13 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles((theme) => ({
     root: {
       '& > *': {
-        margin:'1px',padding:'10px'
+        margin:'1px',padding:'10px',
       },
     },
     formControl: {padding:'30px 0px 0px 0px'},
     grid: {
       flexGrow: 1,
       flexDirection: 'row',
-      background:'#d32f2f',
       padding:'0px 10px 10px 10px',
       justifyContent:'center',
       margin: '-20px -8px -8px -8px',
@@ -18,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
       zeroMinWidth:'0'
 
     },
-    paper: {padding:'20px 10px 25px 10px',
+    paper: {padding:'20px 15px 25px 15px',
     width:'80vw',
     maxWidth:'450px',
     height:'100vhmin',
@@ -26,11 +25,11 @@ const useStyles = makeStyles((theme) => ({
     margin:'30px 15px 30px 15px',
     border:'1px solid',
     borderRadius:'10px',
-    boxShadow:'10px black',
-    background:'#f5f5f5'
+    boxShadow:'0px 5px 15px 0px  black',
+    background:'#fffdf5'
     },
     buttonGroupA:{
-      buttonContainer: {height:'100px', padding:'100px 0px 50px 0px',justifyContent:'center'},
+      buttonContainer: {height:'100px', padding:'100px 0px 50px 0px',justifyContent:'center', background:'#dedede'},
       buttonGroup: {width:'100%', padding:'10px'},
       toggleButtons: {width:'33%', padding:'10px', height:'70px'},
       

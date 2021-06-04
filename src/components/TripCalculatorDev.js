@@ -107,8 +107,8 @@ const TripCalculatorDev = () => {
         return time
       }
   
-    const {fuelused,traveltime} = travelinfo
-    const {fuelused2,traveltime2}=travelinfo2
+    const {fuelused,traveltime,fuelUsed100} = travelinfo
+    const {fuelused2,traveltime2,fuelUsed200}=travelinfo2
   
     const lessTime = `${fuelused ? (fuelused2-fuelused).toFixed(2): fuelused}`
     const moreGas = `${travelTimeConverter((traveltime-traveltime2))} `
@@ -119,6 +119,9 @@ const TripCalculatorDev = () => {
 
     const convertedFuelUse = `${fuelused ? fuelused.toFixed(2):fuelused} litraa`
     const convertedFuelUse2= `${fuelused2 ? fuelused2.toFixed(2):fuelused2} litraa`
+
+    const fuelUse100 = `${fuelUsed100 ? fuelUsed100.toFixed(2):fuelUsed100} L/100km`
+    const fuelUse200= `${fuelUsed200 ? fuelUsed200.toFixed(2):fuelUsed200} L/100km`
     
       return (
         <>
@@ -129,7 +132,7 @@ const TripCalculatorDev = () => {
                 calculateTimeandFuel={calculateTimeandFuel} fuelchange1={handleFuelChange1} fuelchange2={handleFuelChange2} fuelchange3={handleFuelChange3} alignment={alignment} handleAlignment={handleAlignment}/>
           </div>:
           <div className="back">
-          <Results distance={distance} speed1={speed1} speed2={speed2} timeCoverted1={timeCoverted1} timeCoverted2={timeCoverted2}
+          <Results distance={distance} speed1={speed1} speed2={speed2} timeCoverted1={timeCoverted1} timeCoverted2={timeCoverted2} fuelused100={fuelUse100} fuelused200={fuelUse200}
                 convertedFuelUse={convertedFuelUse} convertedFuelUse2={convertedFuelUse2} speedDifference={speedDifference} moreGas={moreGas} lessTime={lessTime} handlereturn={returnToForm}/>
           </div>}
           </div>
