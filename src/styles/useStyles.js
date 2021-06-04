@@ -17,23 +17,23 @@ const useStyles = makeStyles((theme) => ({
       zeroMinWidth:'0'
 
     },
-    paper: {padding:'20px 15px 25px 15px',
+    paper: {padding:'30px 15px 25px 15px',
     width:'80vw',
     maxWidth:'450px',
     height:'100vhmin',
     maxHeight:'640px',
-    margin:'30px 15px 30px 15px',
-    border:'1px solid',
+    margin:'35px 15px 0px 15px',
+    color:'#363636',
+    backgroundColor:'#f7f7f7',
     borderRadius:'10px',
-    boxShadow:'0px 5px 15px 0px  black',
-    background:'#fffdf5'
+    boxShadow:'0px 10px 15px 0px'
+
     },
     buttonGroupA:{
-      buttonContainer: {height:'100px', padding:'100px 0px 50px 0px',justifyContent:'center', background:'#dedede'},
+      buttonContainer: {height:'100px', padding:'100px 0px 50px 0px',justifyContent:'center'},
       buttonGroup: {width:'100%', padding:'10px'},
       toggleButtons: {width:'33%', padding:'10px', height:'70px'},
-      
-    },
+      },
     form:{
       formStyle: {justify:'center',padding:'10px'},
       formCentering: {padding: '0px 0px 11px 120px'},
@@ -46,7 +46,6 @@ const useStyles = makeStyles((theme) => ({
     },
     results:{
       results: { display: 'flex',flexDirection: 'column', margin:'2px'},
-      resultsHeader: {padding: '0px 0px 40px 0px' },
       showResults: {padding: '0px 0px 20px 0px' },
       answerStyle: {padding: '10px 5px 20px 5px' },
       answerBox: {padding:'50px 0px 0px 0px', justifyContent: 'center'}

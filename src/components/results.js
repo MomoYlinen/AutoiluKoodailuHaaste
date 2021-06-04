@@ -1,11 +1,11 @@
 import React,{useState,useEffect} from 'react'
-import divStyles from '../styles/stylesDiv'
+import resultsStyles from '../styles/resultsStyles'
 import Button from '@material-ui/core/Button';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import useStyles from '../styles/useStyles'
 import Paper from '@material-ui/core/Paper';
-import '../styles/dev.css'
+import '../styles/TripCalculator.css'
 
 
 const Results = (props) => {
@@ -45,15 +45,15 @@ const Results = (props) => {
     
 
     return (
-    <>
+    <div>
         <Grid container className={classes.grid} spacing={2} padding='50px'>
-            <Paper className={classes.paper}>
+            <Paper className={classes.paper} elevation={3} variant="outlined">
                 <Grid item xs={12}>
                     <Grid container padding='10px'>
                 <Grid item xs={12}>
                     <Grid container padding='10px' justify="center">
                         <Typography variant='h3'>
-                            <div style={divStyles.results.results}>
+                            <div style={resultsStyles.results.results}>
                                 Tulokset
                             </div>
                         </Typography>
@@ -63,10 +63,10 @@ const Results = (props) => {
                     <div className={fadeProp.fade}>
                     <Grid container padding='10px' justify="center" className={classes.gridSeparations}>
                         <Typography variant='h5'>
-                            <div style={divStyles.results.results}>
+                            <div style={resultsStyles.results.results}>
                                 Etäisyys
                              </div>
-                            <div style={divStyles.results.resultsHeader}>
+                            <div style={resultsStyles.results.resultsHeader}>
                                 {props.distance} Km
                             </div>
                      </Typography>
@@ -77,15 +77,15 @@ const Results = (props) => {
                 <div className={fadeProp.fade}>
                     <Grid container padding='10px' className={classes.results.results} justify='center'>
                         <Typography variant='h5'>
-                            <div style={divStyles.results.resultsHeader}>
+                            <div style={resultsStyles.results.resultsHeader}>
                                 Nopeus
                             </div>
                         </Typography>
                         <Typography variant='subtitle1'>
-                            <div style={divStyles.results.showResults}>
+                            <div style={resultsStyles.results.showResults}>
                                 {props.speed1} Km
                             </div>
-                            <div style={divStyles.results.showResults}>
+                            <div style={resultsStyles.results.showResults}>
                                 {props.speed2} Km
                             </div>
                         </Typography>
@@ -96,15 +96,15 @@ const Results = (props) => {
                 <div className={fadeProp.fade}>
                     <Grid container padding='10px' className={classes.results.results} justify='center'>
                         <Typography variant='h5' className={classes.results.resultsHeader}>
-                             <div style={divStyles.results.resultsHeader}>
+                             <div style={resultsStyles.results.resultsHeader}>
                                 Matka-aika
                             </div>
                         </Typography>
                         <Typography variant='subtitle1'>
-                            <div style={divStyles.results.showResults}>
+                            <div style={resultsStyles.results.showResults}>
                                 {props.timeCoverted1}
                             </div>
-                            <div style={divStyles.results.showResults}>
+                            <div style={resultsStyles.results.showResults}>
                                 {props.timeCoverted2}
                             </div>
                         </Typography>
@@ -115,30 +115,30 @@ const Results = (props) => {
                 <div className={fadeProp.fade}>
                 { show ? <Grid container padding='10px' className={classes.results} justify='center'>
                         <Typography variant='h5' className={classes.results.resultsHeader}>
-                            <div style={divStyles.results.resultsHeader}>
+                            <div style={resultsStyles.results.resultsHeader}>
                                 Kulutus
                             </div>
                         </Typography>
                         <Typography variant='subtitle1'>
-                            <div style={divStyles.results.showResults}>
+                            <div style={resultsStyles.results.showResults}>
                                 {props.convertedFuelUse}
                             </div>
-                            <div style={divStyles.results.showResults}>
+                            <div style={resultsStyles.results.showResults}>
                                 {props.convertedFuelUse2}
                             </div>
                         </Typography>
                     </Grid>:
                     <Grid container padding='10px' className={classes.results} justify="center">
                         <Typography variant='h5' className={classes.results.resultsHeader}>
-                            <div style={divStyles.results.resultsHeader}>
+                            <div style={resultsStyles.results.resultsHeader}>
                                 Kulutus
                             </div>
                         </Typography>
                         <Typography variant='subtitle1'>
-                            <div style={divStyles.results.showResults}>
+                            <div style={resultsStyles.results.showResults}>
                                 {props.fuelused100}
                             </div>
-                            <div style={divStyles.results.showResults}>
+                            <div style={resultsStyles.results.showResults}>
                                 {props.fuelused200}
                             </div>
                         </Typography>
@@ -151,7 +151,7 @@ const Results = (props) => {
                 <div className={fadeProp.fade}>
                     <Grid container className ={classes.results.answerBox}>
                         <Typography variant='h5'>
-                            <div style={divStyles.results.answerStyle}>
+                            <div style={resultsStyles.results.answerStyle}>
                                 Kulkemalla  {props.speedDifference} kilometriä nopeampaa saavutettaan {props.moreGas} 
                                 lyhyempi matka-aika, mutta polttoainekulutus kasvaa {props.lessTime} litraa.
                             </div>
@@ -161,8 +161,8 @@ const Results = (props) => {
                 </Grid>
                 <Grid item xs={12}>
                     <Grid container justify="center" padding ='20px 0px 0px 0px'>
-                        <div style={divStyles.results.answerButton}>
-                        <Button variant="contained" color="primary" type='button' onClick={props.handlereturn}>
+                        <div style={resultsStyles.results.answerButton}>
+                        <Button variant="outlined" color="primary" type='button' onClick={props.handlereturn}>
                             HAE UUDESTAAN
                         </Button>
                         </div>
@@ -170,7 +170,7 @@ const Results = (props) => {
                 </Grid>
             </Paper>
         </Grid>
-    </>
+    </div>
     )
 }
 
