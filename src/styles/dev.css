@@ -5,7 +5,8 @@
     justify-content:center;
     transform: perspective(1000px) rotateY(var(--rotate-y,0)) translateY(var(--translate-y,0));
     transform-style:preserve-3d;
-    transition: 150ms;
+    transition: 200ms;
+    background:'#dedede'
 }
 
 .card.show {
@@ -24,4 +25,18 @@
 
 .card .back{
     transform:rotateY(180deg);
+}
+
+.fade-in {
+    transition: opacity 0.7s ease-in;
+}
+
+.fade-out {
+    opacity: 0;
+    transition: opacity 1s ease;
+}
+
+.background {
+    background:'#dedede';
+    max-height:640px;
 }
