@@ -1,7 +1,7 @@
 import React, {useState} from 'react'
 import fuelUseCalculator from '../utils/fuelUseCalculator'
 import formValidator from '../utils/formValidator'
-import FormSubmit from './Form.js'
+import FormSubmit from './Form'
 import Results from './Results';
 import '../styles/TripCalculator.css';
 
