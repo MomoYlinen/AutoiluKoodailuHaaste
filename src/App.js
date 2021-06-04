@@ -1,16 +1,15 @@
 import React from 'react';
-import TripCalculatorDev from './components/TripCalculatorDev'
+import TripCalculator from './components/TripCalculator'
 import './App.css'
 
 
 
 
 function App() {
-
-
+  
   return (
     <div className="App">
-      <TripCalculatorDev/>
+      <TripCalculator/>
     </div>
   );
 }
