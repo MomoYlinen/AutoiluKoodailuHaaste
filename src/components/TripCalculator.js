@@ -39,7 +39,6 @@ const TripCalculator = () => {
     if(validateForm === false){
       return
     }else{
-
       setShow(false)
 
       const fuelUsed1 = fuelUseCalculator(fuelUse,speed1)
@@ -74,10 +73,15 @@ const TripCalculator = () => {
             counter +=1
             traveltime -= 60
           }
+
+        if (counter === 1){
+          const time = `${counter} tunti ${traveltime.toFixed(0)} minuuttia`
+          return time
+        }else{
         const time = `${counter} tuntia ${traveltime.toFixed(0)} minuuttia`
-    
         return time
       }
+    }
   
     const {fuelused,traveltime,fuelUsed100,fuelused2,traveltime2,fuelUsed200} = travelinfo
   
@@ -97,16 +101,16 @@ const TripCalculator = () => {
     return (
       <div>
       <div className={`card ${show ? '' : 'show'} `}>
-      {show ? 
-        <div className='front'>
-        <FormSubmit distance={distance} handleDistance={handleDistance} speed1={speed1} handleSpeed1={handleSpeed1} speed2={speed2} handleSpeed2={handleSpeed2} type={'submit'}
-              calculateTimeandFuel={calculateTimeandFuel} fuelchange1={handleFuelChange1} fuelchange2={handleFuelChange2} fuelchange3={handleFuelChange3} alignment={alignment} handleAlignment={handleAlignment}/>
-        </div>:
-        <div className="back">
-        <Results distance={distance} speed1={speed1} speed2={speed2} timeCoverted1={timeCoverted1} timeCoverted2={timeCoverted2} fuelused100={fuelUse100} fuelused200={fuelUse200}
-              convertedFuelUse={convertedFuelUse} convertedFuelUse2={convertedFuelUse2} speedDifference={speedDifference} moreGas={moreGas} lessTime={lessTime} handlereturn={returnToForm}/>
-        </div>}
-        </div>
+        {show ? 
+          <div className='front'>
+            <FormSubmit distance={distance} handleDistance={handleDistance} speed1={speed1} handleSpeed1={handleSpeed1} speed2={speed2} handleSpeed2={handleSpeed2} type={'submit'}
+                calculateTimeandFuel={calculateTimeandFuel} fuelchange1={handleFuelChange1} fuelchange2={handleFuelChange2} fuelchange3={handleFuelChange3} alignment={alignment} handleAlignment={handleAlignment}/>
+          </div>:
+          <div className="back">
+            <Results distance={distance} speed1={speed1} speed2={speed2} timeCoverted1={timeCoverted1} timeCoverted2={timeCoverted2} fuelused100={fuelUse100} fuelused200={fuelUse200}
+                convertedFuelUse={convertedFuelUse} convertedFuelUse2={convertedFuelUse2} speedDifference={speedDifference} moreGas={moreGas} lessTime={lessTime} handlereturn={returnToForm}/>
+          </div>}
+          </div>
       </div>
     )
 }
