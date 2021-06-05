@@ -13,7 +13,6 @@ const Results = (props) => {
     const classes = useStyles()
 
     const [show,setShow] = useState(true)
-
     const [fadeProp, setFadeProp] = useState({
         fade: 'fade-out',
     });
@@ -109,7 +108,7 @@ const Results = (props) => {
                             </div>
                         </Typography>
                     </Grid>
-                    </div>
+                </div>
                 </Grid>
                 <Grid item xs={4}>
                 <div className={fadeProp.fade}>
