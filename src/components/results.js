@@ -113,7 +113,7 @@ const Results = (props) => {
                 </Grid>
                 <Grid item xs={4}>
                 <div className={fadeProp.fade}>
-                { show ? <Grid container padding='10px' className={classes.results} justify='center'>
+                    <Grid container padding='10px' className={classes.results} justify='center'>
                         <Typography variant='h5' className={classes.results.resultsHeader}>
                             <div style={resultsStyles.results.resultsHeader}>
                                 Kulutus
@@ -121,29 +121,14 @@ const Results = (props) => {
                         </Typography>
                         <Typography variant='subtitle1'>
                             <div style={resultsStyles.results.showResults}>
-                                {props.convertedFuelUse}
+                            { show ? `${props.convertedFuelUse}` : `${props.fuelused100}`}
                             </div>
                             <div style={resultsStyles.results.showResults}>
-                                {props.convertedFuelUse2}
+                            { show ? `${props.convertedFuelUse2}` : `${props.fuelused200}`}
                             </div>
                         </Typography>
-                    </Grid>:
-                    <Grid container padding='10px' className={classes.results} justify="center">
-                        <Typography variant='h5' className={classes.results.resultsHeader}>
-                            <div style={resultsStyles.results.resultsHeader}>
-                                Kulutus
-                            </div>
-                        </Typography>
-                        <Typography variant='subtitle1'>
-                            <div style={resultsStyles.results.showResults}>
-                                {props.fuelused100}
-                            </div>
-                            <div style={resultsStyles.results.showResults}>
-                                {props.fuelused200}
-                            </div>
-                        </Typography>
-                    </Grid>}
-                    </div>
+                    </Grid>
+                </div>
                 </Grid>
                 </Grid>
                 </Grid>
